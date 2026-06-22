@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Browse Candidates — askJeni for Employers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0D1B2A;--navy-mid:#162233;--blue:#2563EB;--blue-light:#3B82F6;--blue-pale:#EFF4FF;--cloud:#E8F1FF;--cloud-white:#F7F9FC;--yellow:#FFC84D;--yellow-pale:#FFF8E6;--green:#16A34A;--green-pale:#DCFCE7;--orange:#EA580C;--orange-pale:#FFF0E6;--text-1:#0D1B2A;--text-2:#4B5563;--text-3:#9CA3AF;--border:#E5E7EB;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:var(--cloud-white);color:var(--text-1);}
+nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:18px;font-weight:700;color:white;text-decoration:none;letter-spacing:-0.02em;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-link{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;}
+.nav-link:hover{color:white;}
+.employer-badge{background:rgba(255,200,77,0.15);border:1px solid rgba(255,200,77,0.3);color:var(--yellow);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.btn-primary{background:var(--blue);color:white;border:none;border-radius:7px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+
+.layout{display:flex;min-height:calc(100vh - 52px);}
+
+/* FILTER SIDEBAR */
+.filter-sidebar{width:240px;background:white;border-right:1px solid var(--border);padding:24px 20px;flex-shrink:0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;}
+.filter-section{margin-bottom:24px;}
+.filter-section-title{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.filter-option{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;}
+.filter-option input{accent-color:var(--blue);}
+.filter-option label{font-size:13px;color:var(--text-2);cursor:pointer;}
+.filter-option label span{font-size:11px;color:var(--text-3);margin-left:4px;}
+.filter-input{width:100%;height:36px;border:1px solid var(--border);border-radius:7px;padding:0 10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text-1);outline:none;}
+.filter-input:focus{border-color:var(--blue);}
+.salary-range{display:flex;gap:8px;align-items:center;}
+.salary-range input{width:80px;height:36px;border:1px solid var(--border);border-radius:7px;padding:0 8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;}
+.salary-range span{font-size:13px;color:var(--text-3);}
+.filter-reset{font-size:12px;font-weight:500;color:var(--blue);cursor:pointer;padding-top:8px;display:block;}
+
+/* MAIN */
+.browse-main{flex:1;padding:28px 32px;min-width:0;}
+.browse-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.browse-title{font-size:18px;font-weight:700;letter-spacing:-0.02em;}
+.browse-sub{font-size:13px;color:var(--text-3);margin-top:2px;}
+.browse-controls{display:flex;align-items:center;gap:10px;}
+.sort-select{height:36px;padding:0 10px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text-2);background:white;outline:none;cursor:pointer;}
+
+/* CANDIDATE CARDS GRID */
+.candidates-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+
+/* CANDIDATE CARD */
+.candidate-card{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;display:block;transition:border-color 0.15s,box-shadow 0.15s;}
+.candidate-card:hover{border-color:var(--blue);box-shadow:0 2px 12px rgba(37,99,235,0.08);}
+.candidate-card.featured{border-color:#bfdbfe;}
+
+/* CARD HEADER */
+.cc-header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:12px;position:relative;}
+.cc-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0;border:2px solid rgba(255,255,255,0.15);}
+.cc-name{font-size:15px;font-weight:600;color:white;margin-bottom:2px;}
+.cc-degree{font-size:12px;color:rgba(255,255,255,0.45);}
+.cc-badges{display:flex;gap:6px;position:absolute;top:12px;right:14px;}
+.cc-badge{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;}
+.cc-badge.verified{background:rgba(22,163,74,0.2);color:#4ade80;}
+.cc-badge.new{background:rgba(255,200,77,0.2);color:var(--yellow);}
+.cc-score{font-size:10px;font-weight:600;padding:3px 7px;border-radius:4px;background:rgba(255,200,77,0.15);color:var(--yellow);}
+
+/* FIVE SIGNALS */
+.five-signals{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border);}
+.signal-item{padding:10px 12px;border-right:1px solid var(--border);}
+.signal-item:last-child{border-right:none;}
+.signal-label{font-size:9px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;}
+.signal-value{font-size:12px;font-weight:600;color:var(--text-1);line-height:1.3;}
+.signal-sub{font-size:10px;color:var(--text-3);}
+
+/* CARD FOOTER */
+.cc-footer{padding:12px 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:500;}
+.chip-blue{background:var(--blue-pale);color:var(--blue);}
+.chip-yellow{background:var(--yellow-pale);color:#92400E;}
+.chip-white{background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);}
+.cc-action{margin-left:auto;font-size:12px;font-weight:600;color:var(--blue);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="askjeni-landing.html" class="nav-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span></a>
+  <div class="nav-right">
+    <span class="employer-badge">Employer view</span>
+    <a href="askjeni-landing.html" class="nav-link">For students</a>
+    <a href="#" class="nav-link">How it works</a>
+    <a href="#" class="btn-primary">Post a role</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- FILTER SIDEBAR -->
+  <aside class="filter-sidebar">
+    <div style="font-size:14px;font-weight:600;margin-bottom:20px">Filter candidates</div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Location</div>
+      <div class="filter-option"><input type="checkbox" id="jhb" checked/><label for="jhb">Johannesburg <span>(24)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="cpt" checked/><label for="cpt">Cape Town <span>(18)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="pta"/><label for="pta">Pretoria <span>(11)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="dbn"/><label for="dbn">Durban <span>(8)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="rel" checked/><label for="rel">Willing to relocate <span>(47)</span></label></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Salary range (R / month)</div>
+      <div class="salary-range">
+        <input type="number" placeholder="14 000" value="14000"/>
+        <span>–</span>
+        <input type="number" placeholder="35 000" value="35000"/>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Graduating</div>
+      <div class="filter-option"><input type="checkbox" id="g25" checked/><label for="g25">Nov 2025 <span>(31)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="g26"/><label for="g26">2026 <span>(44)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="grad"/><label for="grad">Already graduated <span>(12)</span></label></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Tech stack</div>
+      <div class="filter-option"><input type="checkbox" id="react" checked/><label for="react">React <span>(38)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="python" checked/><label for="python">Python <span>(52)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="nodejs"/><label for="nodejs">Node.js <span>(29)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="java"/><label for="java">Java <span>(24)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="ts"/><label for="ts">TypeScript <span>(21)</span></label></div>
+      <div class="filter-option"><input type="checkbox" id="sql"/><label for="sql">SQL <span>(44)</span></label></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Verified skills only</div>
+      <div class="filter-option"><input type="checkbox" id="verified" checked/><label for="verified">Must have verified badge</label></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Work type</div>
+      <div class="filter-option"><input type="checkbox" id="ft" checked/><label for="ft">Full-time</label></div>
+      <div class="filter-option"><input type="checkbox" id="intern" checked/><label for="intern">Internship</label></div>
+      <div class="filter-option"><input type="checkbox" id="contract"/><label for="contract">Contract</label></div>
+    </div>
+
+    <a href="#" class="filter-reset" onclick="return false">Reset all filters</a>
+  </aside>
+
+  <!-- BROWSE MAIN -->
+  <div class="browse-main">
+    <div class="browse-topbar">
+      <div>
+        <div class="browse-title">87 verified candidates</div>
+        <div class="browse-sub">Matching your filters · Sorted by passport completion</div>
+      </div>
+      <div class="browse-controls">
+        <select class="sort-select">
+          <option>Sort: Passport completion</option>
+          <option>Sort: Salary (low–high)</option>
+          <option>Sort: Graduation date</option>
+          <option>Sort: Newest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="candidates-grid">
+
+      <!-- THABO -->
+      <a href="thabo-public-profile.html" class="candidate-card featured">
+        <div class="cc-header">
+          <div class="cc-avatar" style="background:var(--blue)">TN</div>
+          <div>
+            <div class="cc-name">Thabo Nkosi</div>
+            <div class="cc-degree">BSc Computer Science · Wits</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge verified">✓ Verified</span>
+            <span class="cc-badge new">New</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">Jhb</div><div class="signal-sub">Gauteng</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R22 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Nov 2025</div><div class="signal-sub">Wits</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">React</div><div class="signal-sub">Python+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Jan 2026</div><div class="signal-sub">Hybrid</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-blue">✓ React</span>
+          <span class="chip chip-blue">✓ Python</span>
+          <span class="chip chip-yellow">Node.js</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+      <!-- CANDIDATE 2 -->
+      <a href="thabo-public-profile.html" class="candidate-card">
+        <div class="cc-header" style="background:#1a2744">
+          <div class="cc-avatar" style="background:#16A34A">KM</div>
+          <div>
+            <div class="cc-name">Kefilwe Molefe</div>
+            <div class="cc-degree">BSc Information Technology · UP</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">Pta</div><div class="signal-sub">Gauteng</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R20 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Nov 2025</div><div class="signal-sub">UP</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">Python</div><div class="signal-sub">Django+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Jan 2026</div><div class="signal-sub">Remote</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-blue">✓ Python</span>
+          <span class="chip chip-blue">✓ Django</span>
+          <span class="chip chip-yellow">PostgreSQL</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+      <!-- CANDIDATE 3 -->
+      <a href="thabo-public-profile.html" class="candidate-card">
+        <div class="cc-header" style="background:#1e1a44">
+          <div class="cc-avatar" style="background:#7C3AED">AP</div>
+          <div>
+            <div class="cc-name">Amara Petersen</div>
+            <div class="cc-degree">BSc Computer Science · UCT</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge verified">✓ Verified</span>
+            <span class="cc-score">JS 94/100</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">CPT</div><div class="signal-sub">W. Cape</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R24 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Jun 2025</div><div class="signal-sub">UCT</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">React</div><div class="signal-sub">TS+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Now</div><div class="signal-sub">Hybrid</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-blue">✓ React</span>
+          <span class="chip chip-blue">✓ JavaScript</span>
+          <span class="chip chip-yellow">TypeScript</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+      <!-- CANDIDATE 4 -->
+      <a href="thabo-public-profile.html" class="candidate-card">
+        <div class="cc-header" style="background:#1a2f2a">
+          <div class="cc-avatar" style="background:#0D9488">LB</div>
+          <div>
+            <div class="cc-name">Luyanda Booi</div>
+            <div class="cc-degree">Diploma Software Development · CPUT</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge new">New</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">CPT</div><div class="signal-sub">W. Cape</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R16 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Nov 2025</div><div class="signal-sub">CPUT</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">Java</div><div class="signal-sub">Spring+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Jan 2026</div><div class="signal-sub">In-office</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-yellow">Java</span>
+          <span class="chip chip-yellow">Spring Boot</span>
+          <span class="chip chip-white">MySQL</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+      <!-- CANDIDATE 5 -->
+      <a href="thabo-public-profile.html" class="candidate-card">
+        <div class="cc-header" style="background:#2a1a1a">
+          <div class="cc-avatar" style="background:var(--orange)">SN</div>
+          <div>
+            <div class="cc-name">Sipho Ntuli</div>
+            <div class="cc-degree">BSc Computer Engineering · Wits</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge verified">✓ Verified</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">Jhb</div><div class="signal-sub">Gauteng</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R25 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Nov 2025</div><div class="signal-sub">Wits</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">C++</div><div class="signal-sub">Python+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Feb 2026</div><div class="signal-sub">Hybrid</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-blue">✓ Python</span>
+          <span class="chip chip-yellow">C++</span>
+          <span class="chip chip-white">Linux</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+      <!-- CANDIDATE 6 -->
+      <a href="thabo-public-profile.html" class="candidate-card">
+        <div class="cc-header" style="background:#1a2233">
+          <div class="cc-avatar" style="background:#0EA5E9">TM</div>
+          <div>
+            <div class="cc-name">Thandeka Mkhize</div>
+            <div class="cc-degree">BSc Computer Science · UKZN</div>
+          </div>
+          <div class="cc-badges">
+            <span class="cc-badge verified">✓ Verified</span>
+            <span class="cc-badge new">New</span>
+          </div>
+        </div>
+        <div class="five-signals">
+          <div class="signal-item"><div class="signal-label">Location</div><div class="signal-value">DBN</div><div class="signal-sub">KZN</div></div>
+          <div class="signal-item"><div class="signal-label">Salary</div><div class="signal-value">R18 000</div><div class="signal-sub">/month</div></div>
+          <div class="signal-item"><div class="signal-label">Grad</div><div class="signal-value">Jun 2025</div><div class="signal-sub">UKZN</div></div>
+          <div class="signal-item"><div class="signal-label">Stack</div><div class="signal-value">React</div><div class="signal-sub">Node.js+</div></div>
+          <div class="signal-item"><div class="signal-label">From</div><div class="signal-value">Now</div><div class="signal-sub">Remote</div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="chip chip-blue">✓ React</span>
+          <span class="chip chip-blue">✓ Node.js</span>
+          <span class="chip chip-yellow">MongoDB</span>
+          <span class="cc-action">View profile →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

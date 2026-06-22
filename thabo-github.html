@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>thabonkosi — GitHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0D1B2A;--blue:#2563EB;--blue-pale:#EFF4FF;--cloud-white:#F7F9FC;--yellow:#FFC84D;--green:#16A34A;--green-pale:#DCFCE7;--text-1:#0D1B2A;--text-2:#4B5563;--text-3:#9CA3AF;--border:#E5E7EB;--white:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:#0d1117;color:#e6edf3;min-height:100vh;}
+.gh-nav{background:#161b22;border-bottom:1px solid #30363d;height:48px;display:flex;align-items:center;padding:0 32px;gap:16px;}
+.gh-logo{font-size:24px;color:#f0f6fc;}
+.gh-nav-link{font-size:13px;color:#8b949e;text-decoration:none;font-weight:500;}
+.gh-nav-link:hover{color:#e6edf3;}
+.gh-search{flex:1;max-width:300px;height:28px;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:0 10px;font-size:13px;color:#8b949e;font-family:'Inter',sans-serif;outline:none;}
+
+.gh-layout{display:flex;gap:32px;max-width:1200px;margin:0 auto;padding:32px;}
+
+/* SIDEBAR */
+.gh-sidebar{width:260px;flex-shrink:0;}
+.gh-avatar{width:260px;height:260px;border-radius:50%;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:80px;font-weight:700;color:white;margin-bottom:16px;}
+.gh-name{font-size:20px;font-weight:700;color:#e6edf3;margin-bottom:2px;}
+.gh-username{font-size:16px;font-weight:300;color:#8b949e;margin-bottom:14px;}
+.gh-bio{font-size:14px;color:#8b949e;line-height:1.55;margin-bottom:14px;}
+.gh-btn{display:block;width:100%;height:32px;background:#21262d;border:1px solid rgba(240,246,252,0.1);border-radius:6px;font-size:14px;font-weight:500;color:#c9d1d9;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:14px;}
+.gh-meta{font-size:13px;color:#8b949e;margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.gh-meta a{color:#58a6ff;text-decoration:none;}
+.gh-stats{display:flex;gap:16px;margin:12px 0;}
+.gh-stat{font-size:13px;color:#8b949e;} .gh-stat strong{color:#e6edf3;}
+.gh-langs{margin-top:14px;}
+.gh-langs-title{font-size:12px;font-weight:600;color:#8b949e;margin-bottom:8px;}
+.lang-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:#8b949e;}
+.lang-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* MAIN */
+.gh-main{flex:1;min-width:0;}
+.gh-tabs{display:flex;gap:0;border-bottom:1px solid #30363d;margin-bottom:24px;}
+.gh-tab{padding:8px 16px;font-size:14px;font-weight:500;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;text-decoration:none;}
+.gh-tab.active{color:#e6edf3;border-bottom-color:#f78166;}
+.gh-tab-count{background:#21262d;color:#8b949e;font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;margin-left:4px;}
+
+/* CONTRIBUTION GRAPH */
+.contrib-section{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;margin-bottom:20px;}
+.contrib-title{font-size:13px;color:#8b949e;margin-bottom:12px;}
+.contrib-grid{display:flex;gap:3px;overflow-x:auto;}
+.contrib-week{display:flex;flex-direction:column;gap:3px;}
+.contrib-day{width:11px;height:11px;border-radius:2px;}
+.contrib-day.l0{background:#161b22;border:1px solid #21262d;}
+.contrib-day.l1{background:#0e4429;}
+.contrib-day.l2{background:#006d32;}
+.contrib-day.l3{background:#26a641;}
+.contrib-day.l4{background:#39d353;}
+
+/* PINNED REPOS */
+.pinned-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.repo-card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:16px;}
+.repo-card:hover{border-color:#58a6ff;}
+.repo-name{font-size:14px;font-weight:600;color:#58a6ff;margin-bottom:6px;}
+.repo-name span{font-size:13px;font-weight:400;color:#8b949e;margin-right:6px;}
+.repo-desc{font-size:12px;color:#8b949e;line-height:1.5;margin-bottom:10px;}
+.repo-meta{display:flex;gap:12px;font-size:12px;color:#8b949e;align-items:center;}
+.repo-lang-dot{width:10px;height:10px;border-radius:50%;}
+.repo-stars{display:flex;align-items:center;gap:3px;}
+.repo-tag{background:#0d419d;color:#58a6ff;font-size:11px;font-weight:500;padding:2px 7px;border-radius:20px;}
+
+/* ACTIVITY */
+.activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #21262d;font-size:13px;color:#8b949e;}
+.activity-icon{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:#8b949e;}
+.activity-text a{color:#58a6ff;text-decoration:none;}
+
+/* BACK LINK */
+.back-bar{background:#161b22;border-bottom:1px solid #30363d;padding:8px 32px;font-size:12px;color:#8b949e;display:flex;align-items:center;gap:8px;}
+.back-bar a{color:#58a6ff;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="back-bar">
+  ← Back to <a href="thabo-public-profile.html">Thabo's askJeni profile</a> · This is a fictional GitHub profile for prototype purposes
+</div>
+
+<div class="gh-nav">
+  <span class="gh-logo">⬡</span>
+  <a href="#" class="gh-nav-link">Product</a>
+  <a href="#" class="gh-nav-link">Solutions</a>
+  <a href="#" class="gh-nav-link">Open Source</a>
+  <input class="gh-search" placeholder="Search or jump to…"/>
+  <a href="#" class="gh-nav-link">Sign in</a>
+  <a href="#" class="gh-nav-link">Sign up</a>
+</div>
+
+<div class="gh-layout">
+  <!-- SIDEBAR -->
+  <aside class="gh-sidebar">
+    <div class="gh-avatar">TN</div>
+    <div class="gh-name">Thabo Nkosi</div>
+    <div class="gh-username">thabonkosi</div>
+    <div class="gh-bio">Final-year BSc CS @ Wits. Building things that solve real SA problems. React · Python · Node.js 🇿🇦</div>
+    <button class="gh-btn">Follow</button>
+    <div class="gh-stats">
+      <span class="gh-stat"><strong>127</strong> followers</span>
+      <span class="gh-stat"><strong>43</strong> following</span>
+    </div>
+    <div class="gh-meta">📍 Johannesburg, South Africa</div>
+    <div class="gh-meta">🔗 <a href="thabo-public-profile.html">askjeni.co.za/thabo-nkosi</a></div>
+    <div class="gh-meta">📅 Joined March 2022</div>
+    <div class="gh-langs">
+      <div class="gh-langs-title">Most used languages</div>
+      <div class="lang-row"><div class="lang-dot" style="background:#f1e05a"></div> JavaScript · 38%</div>
+      <div class="lang-row"><div class="lang-dot" style="background:#3572A5"></div> Python · 31%</div>
+      <div class="lang-row"><div class="lang-dot" style="background:#2b7489"></div> TypeScript · 16%</div>
+      <div class="lang-row"><div class="lang-dot" style="background:#e34c26"></div> HTML · 10%</div>
+      <div class="lang-row"><div class="lang-dot" style="background:#563d7c"></div> CSS · 5%</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="gh-main">
+    <div class="gh-tabs">
+      <a href="#" class="gh-tab active">Overview</a>
+      <a href="#" class="gh-tab">Repositories <span class="gh-tab-count">14</span></a>
+      <a href="#" class="gh-tab">Projects <span class="gh-tab-count">3</span></a>
+      <a href="#" class="gh-tab">Stars <span class="gh-tab-count">89</span></a>
+    </div>
+
+    <!-- PINNED -->
+    <div style="font-size:13px;font-weight:600;color:#e6edf3;margin-bottom:10px">Pinned</div>
+    <div class="pinned-grid">
+      <div class="repo-card">
+        <div class="repo-name">sa-loadshedding-tracker</div>
+        <div class="repo-desc">Real-time Eskom load shedding schedule tracker with push notifications and area-based search. Used by 1 200+ people across Gauteng. 🇿🇦</div>
+        <div class="repo-meta">
+          <div class="repo-lang-dot" style="background:#3572A5"></div> Python
+          <div class="repo-lang-dot" style="background:#f1e05a"></div> JavaScript
+          <span class="repo-stars">⭐ 1 243</span>
+          <span>🍴 87</span>
+        </div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">studysync</div>
+        <div class="repo-desc">Real-time collaborative study platform for SA students. Create shared study rooms, sync notes, track group progress. Built with React + Node.js.</div>
+        <div class="repo-meta">
+          <div class="repo-lang-dot" style="background:#2b7489"></div> TypeScript
+          <div class="repo-lang-dot" style="background:#f1e05a"></div> JavaScript
+          <span class="repo-stars">⭐ 34</span>
+          <span>🍴 5</span>
+        </div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">fastapi-auth-starter</div>
+        <div class="repo-desc">Minimal FastAPI + PostgreSQL auth boilerplate with JWT, refresh tokens, and role-based access. Used this in multiple projects.</div>
+        <div class="repo-meta">
+          <div class="repo-lang-dot" style="background:#3572A5"></div> Python
+          <span class="repo-stars">⭐ 18</span>
+          <span>🍴 12</span>
+        </div>
+      </div>
+      <div class="repo-card">
+        <div class="repo-name">ml-final-year-project</div>
+        <div class="repo-desc">Final year research project — applying ML to [redacted for submission]. Work in progress, November 2025 deadline.</div>
+        <div class="repo-meta">
+          <div class="repo-lang-dot" style="background:#3572A5"></div> Python
+          <span style="background:#0d419d;color:#58a6ff;font-size:11px;padding:2px 7px;border-radius:20px">In progress</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTRIBUTION GRAPH -->
+    <div class="contrib-section">
+      <div class="contrib-title">387 contributions in the last year</div>
+      <div class="contrib-grid" id="contrib-grid"></div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div style="font-size:13px;font-weight:600;color:#e6edf3;margin-bottom:12px">Recent activity</div>
+    <div class="activity-item">
+      <span>⬡</span>
+      <span>Pushed 3 commits to <a href="#">thabonkosi/sa-loadshedding-tracker</a> · <span style="color:#8b949e">2 days ago</span></span>
+    </div>
+    <div class="activity-item">
+      <span>⭐</span>
+      <span>Starred <a href="#">nicehash/NiceHashQuickMiner</a> · <span style="color:#8b949e">4 days ago</span></span>
+    </div>
+    <div class="activity-item">
+      <span>⬡</span>
+      <span>Opened issue in <a href="#">thabonkosi/studysync</a>: "Add mobile-responsive layout for study room view" · <span style="color:#8b949e">5 days ago</span></span>
+    </div>
+    <div class="activity-item">
+      <span>⬡</span>
+      <span>Pushed 7 commits to <a href="#">thabonkosi/ml-final-year-project</a> · <span style="color:#8b949e">1 week ago</span></span>
+    </div>
+    <div class="activity-item">
+      <span>🍴</span>
+      <span>Forked <a href="#">tiangolo/fastapi</a> · <span style="color:#8b949e">2 weeks ago</span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Generate a plausible contribution grid
+const grid = document.getElementById('contrib-grid');
+const levels = [0,0,0,1,1,1,2,2,3,3,4];
+for (let w = 0; w < 52; w++) {
+  const week = document.createElement('div');
+  week.className = 'contrib-week';
+  for (let d = 0; d < 7; d++) {
+    const day = document.createElement('div');
+    const l = Math.random() > 0.45 ? levels[Math.floor(Math.random()*levels.length)] : 0;
+    day.className = 'contrib-day l' + l;
+    week.appendChild(day);
+  }
+  grid.appendChild(week);
+}
+</script>
+</body>
+</html>

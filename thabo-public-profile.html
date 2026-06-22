@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Thabo Nkosi — askJeni Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:#0D1B2A;--navy-mid:#162233;--blue:#2563EB;--blue-light:#3B82F6;
+  --blue-pale:#EFF4FF;--cloud:#E8F1FF;--cloud-white:#F7F9FC;
+  --yellow:#FFC84D;--yellow-pale:#FFF8E6;--green:#16A34A;--green-pale:#DCFCE7;
+  --orange:#EA580C;--orange-pale:#FFF0E6;--text-1:#0D1B2A;--text-2:#4B5563;
+  --text-3:#9CA3AF;--border:#E5E7EB;--white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:var(--cloud-white);color:var(--text-1);}
+
+nav{background:var(--navy);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:18px;font-weight:700;color:white;text-decoration:none;letter-spacing:-0.02em;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-link{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;}
+.nav-link:hover{color:white;}
+.nav-cta{background:var(--blue);color:white;font-size:13px;font-weight:600;text-decoration:none;padding:7px 16px;border-radius:7px;}
+
+.profile-wrap{max-width:860px;margin:0 auto;padding:40px;}
+
+/* HEADER */
+.profile-header{background:var(--navy);border-radius:14px;padding:32px;margin-bottom:0;position:relative;overflow:hidden;}
+.profile-header::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,0.12) 0%,transparent 70%);top:-100px;right:-80px;pointer-events:none;}
+.ph-row{display:flex;align-items:center;gap:22px;}
+.ph-avatar{width:80px;height:80px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:white;flex-shrink:0;border:2px solid rgba(255,255,255,0.15);}
+.ph-info{flex:1;}
+.ph-name{font-size:26px;font-weight:700;color:white;letter-spacing:-0.02em;margin-bottom:4px;}
+.ph-degree{font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:10px;}
+.ph-badges{display:flex;gap:8px;flex-wrap:wrap;}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-green{background:rgba(22,163,74,0.2);color:#4ade80;}
+.badge-yellow{background:rgba(255,200,77,0.15);color:var(--yellow);}
+.badge-blue{background:rgba(37,99,235,0.25);color:#93c5fd;}
+.ph-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.btn-primary{background:var(--blue);color:white;border:none;border-radius:7px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;text-align:center;}
+.btn-outline-white{background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.2);border-radius:7px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;text-align:center;}
+
+/* SIGNAL BAND */
+.signal-band{background:white;display:flex;border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;margin-bottom:24px;overflow:hidden;}
+.signal-item{flex:1;padding:18px 20px;border-right:1px solid var(--border);}
+.signal-item:last-child{border-right:none;}
+.signal-label{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;}
+.signal-value{font-size:14px;font-weight:600;color:var(--text-1);}
+.signal-sub{font-size:12px;color:var(--text-3);}
+
+/* EMPLOYER CTA BAR */
+.employer-bar{background:var(--blue-pale);border:1px solid #bfdbfe;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.employer-bar-text{flex:1;}
+.employer-bar-text strong{font-size:14px;font-weight:600;display:block;margin-bottom:2px;}
+.employer-bar-text p{font-size:13px;color:var(--text-2);}
+.btn-dark{background:var(--navy);color:white;border:none;border-radius:7px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;white-space:nowrap;}
+
+.card{background:white;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:600;}
+.card-link{font-size:13px;font-weight:500;color:var(--blue);text-decoration:none;}
+
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:500;}
+.chip-blue{background:var(--blue-pale);color:var(--blue);}
+.chip-yellow{background:var(--yellow-pale);color:#92400E;}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-pale);padding:3px 8px;border-radius:20px;}
+
+/* SKILLS */
+.skills-section{margin-bottom:16px;}
+.skills-section-label{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
+.skills-row{display:flex;flex-wrap:wrap;gap:8px;}
+.skills-legend{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);}
+.legend-dot{width:10px;height:10px;border-radius:3px;}
+
+/* ASSESSMENTS */
+.assess-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.assess-row:last-child{border-bottom:none;}
+.assess-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.assess-info{flex:1;}
+.assess-name{font-size:13px;font-weight:600;margin-bottom:1px;}
+.assess-meta{font-size:12px;color:var(--text-3);}
+.assess-bar{height:4px;background:var(--cloud-white);border-radius:2px;margin-top:5px;overflow:hidden;}
+.assess-fill{height:100%;border-radius:2px;}
+.assess-score{font-size:15px;font-weight:700;color:var(--green);}
+
+/* PROJECTS */
+.project-card{border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;}
+.project-card:last-child{margin-bottom:0;}
+.project-name{font-size:14px;font-weight:600;margin-bottom:4px;}
+.project-desc{font-size:13px;color:var(--text-2);line-height:1.55;}
+.project-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.project-link{font-size:12px;font-weight:500;color:var(--blue);text-decoration:none;}
+
+/* STICKY BOTTOM BAR */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;box-shadow:0 -4px 24px rgba(0,0,0,0.06);}
+.sticky-bar-info{font-size:13px;color:var(--text-2);}
+.sticky-bar-info strong{color:var(--text-1);}
+.sticky-bar-actions{display:flex;gap:10px;}
+.btn-secondary{background:var(--blue-pale);color:var(--blue);border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+
+/* pad for sticky bar */
+body{padding-bottom:72px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="askjeni-landing.html" class="nav-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span></a>
+  <div class="nav-right">
+    <a href="askjeni-employer-browse.html" class="nav-link">Browse candidates</a>
+    <a href="askjeni-register.html" class="nav-cta">Post a role</a>
+  </div>
+</nav>
+
+<div class="profile-wrap">
+
+  <!-- HEADER -->
+  <div class="profile-header">
+    <div class="ph-row">
+      <div class="ph-avatar">TN</div>
+      <div class="ph-info">
+        <div class="ph-name">Thabo Nkosi</div>
+        <div class="ph-degree">BSc Computer Science · University of the Witwatersrand · Graduating November 2025</div>
+        <div class="ph-badges">
+          <span class="badge badge-green">✓ Verified skills</span>
+          <span class="badge badge-yellow">✦ 83% passport</span>
+          <span class="badge badge-blue">Python 91/100</span>
+          <span class="badge badge-blue">Open to opportunities</span>
+        </div>
+      </div>
+      <div class="ph-actions">
+        <a href="askjeni-employer-browse.html" class="btn-primary">Express interest</a>
+        <a href="#" class="btn-outline-white">Save profile</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIVE SIGNAL BAND -->
+  <div class="signal-band">
+    <div class="signal-item">
+      <div class="signal-label">Location</div>
+      <div class="signal-value">Johannesburg</div>
+      <div class="signal-sub">Gauteng · SA</div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-label">Salary</div>
+      <div class="signal-value">R22 000</div>
+      <div class="signal-sub">per month</div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-label">Graduating</div>
+      <div class="signal-value">Nov 2025</div>
+      <div class="signal-sub">Wits University</div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-label">Top Skills</div>
+      <div class="signal-value">React, Python</div>
+      <div class="signal-sub">+ Node.js verified</div>
+    </div>
+    <div class="signal-item">
+      <div class="signal-label">Available</div>
+      <div class="signal-value">Jan 2026</div>
+      <div class="signal-sub">Hybrid · Remote</div>
+    </div>
+  </div>
+
+  <!-- EMPLOYER CTA -->
+  <div class="employer-bar">
+    <div class="employer-bar-text">
+      <strong>Hiring graduates? Thabo is open to opportunities from January 2026.</strong>
+      <p>Request an introduction or browse similar candidates on askJeni. Free to sign up for companies.</p>
+    </div>
+    <a href="askjeni-employer-browse.html" class="btn-dark">Browse all candidates →</a>
+  </div>
+
+  <!-- TWO-COL -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- SKILLS -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-header"><span class="card-title">Tech stack</span></div>
+      <div class="skills-section">
+        <div class="skills-section-label">Verified by assessment</div>
+        <div class="skills-row">
+          <span class="chip chip-blue">✓ React</span>
+          <span class="chip chip-blue">✓ Python</span>
+          <span class="chip chip-blue">✓ JavaScript</span>
+          <span class="chip chip-blue">✓ Node.js</span>
+        </div>
+      </div>
+      <div class="skills-section" style="margin-bottom:0">
+        <div class="skills-section-label">Self-declared</div>
+        <div class="skills-row">
+          <span class="chip chip-yellow">TypeScript</span>
+          <span class="chip chip-yellow">PostgreSQL</span>
+          <span class="chip chip-yellow">Docker</span>
+          <span class="chip chip-yellow">FastAPI</span>
+        </div>
+      </div>
+      <div class="skills-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-pale);border:1px solid var(--blue)"></div> Assessed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-pale);border:1px solid #FFC84D"></div> Self-declared</div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-header"><span class="card-title">About</span></div>
+      <p style="font-size:13px;color:var(--text-2);line-height:1.65;margin-bottom:14px">
+        Final-year CS student at Wits with a background in full-stack development. I build tools that solve real South African problems — my load shedding tracker has 1 200+ GitHub stars.
+        Looking for a hybrid or remote role from January 2026.
+      </p>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <span class="chip" style="background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);font-size:11px">Hybrid</span>
+        <span class="chip" style="background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);font-size:11px">Remote</span>
+        <span class="chip" style="background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);font-size:11px">Full-time</span>
+        <span class="chip" style="background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);font-size:11px">Internship</span>
+        <span class="chip" style="background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);font-size:11px">Willing to relocate</span>
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:14px">
+        <a href="thabo-github.html" style="font-size:12px;font-weight:500;color:var(--blue);text-decoration:none">↗ GitHub</a>
+        <a href="thabo-linkedin.html" style="font-size:12px;font-weight:500;color:var(--blue);text-decoration:none">↗ LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENTS -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">Skill assessments</span><span class="verified-badge">✓ askJeni verified</span></div>
+    <div class="assess-row">
+      <div class="assess-icon" style="background:var(--yellow-pale)">🐍</div>
+      <div class="assess-info">
+        <div class="assess-name">Python &amp; Data Structures</div>
+        <div class="assess-meta">Verified · 20 questions · Proctored</div>
+        <div class="assess-bar"><div class="assess-fill" style="width:91%;background:var(--green)"></div></div>
+      </div>
+      <span class="verified-badge">✓ Verified</span>
+      <div class="assess-score">91/100</div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">Projects</span></div>
+
+    <div class="project-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">
+        <div class="project-name">SA Load Shedding Tracker</div>
+        <span class="chip chip-yellow" style="font-size:11px;white-space:nowrap">⭐ 1 200+ stars</span>
+      </div>
+      <div class="project-desc">Real-time Eskom load shedding schedule tracker with push notifications and area-based search. Used by students and residents across Gauteng. One of the top SA utility apps on GitHub.</div>
+      <div class="project-tags">
+        <span class="chip chip-blue" style="font-size:11px">Python</span>
+        <span class="chip chip-yellow" style="font-size:11px">FastAPI</span>
+        <span class="chip chip-blue" style="font-size:11px">React</span>
+      </div>
+      <div style="margin-top:10px"><a href="thabo-github.html" class="project-link">↗ View on GitHub</a></div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">StudySync</div>
+      <div class="project-desc">Real-time collaborative study platform. Students create shared study rooms, sync notes, and track progress together. Built for the SA context where group study sessions are common.</div>
+      <div class="project-tags">
+        <span class="chip chip-blue" style="font-size:11px">React</span>
+        <span class="chip chip-blue" style="font-size:11px">Node.js</span>
+        <span class="chip chip-blue" style="font-size:11px">PostgreSQL</span>
+        <span class="chip chip-yellow" style="font-size:11px">Socket.io</span>
+      </div>
+      <div style="margin-top:10px"><a href="thabo-github.html" class="project-link">↗ View on GitHub</a></div>
+    </div>
+
+    <div class="project-card" style="border-style:dashed;background:var(--cloud-white)">
+      <div class="project-name" style="color:var(--text-3)">Final Year Research Project — ML (in progress)</div>
+      <div class="project-desc" style="color:var(--text-3)">Machine learning · Expected completion November 2025</div>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">Education</span></div>
+    <div style="display:flex;align-items:flex-start;gap:14px">
+      <div style="width:42px;height:42px;border-radius:10px;background:var(--cloud-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-2);flex-shrink:0">WITS</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:2px">BSc Computer Science</div>
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:4px">University of the Witwatersrand · 2023 – 2025</div>
+        <div style="font-size:12px;color:var(--text-3)">3rd year · Graduating November 2025 · Johannesburg</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STICKY BOTTOM BAR -->
+<div class="sticky-bar">
+  <div class="sticky-bar-info">
+    Viewing <strong>Thabo Nkosi</strong> — available from January 2026 · R22 000 / month · Johannesburg
+  </div>
+  <div class="sticky-bar-actions">
+    <a href="askjeni-employer-browse.html" class="btn-secondary">Save profile</a>
+    <a href="askjeni-employer-browse.html" class="btn-primary">Express interest →</a>
+  </div>
+</div>
+
+</body>
+</html>

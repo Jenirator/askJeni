@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Opportunities — askJeni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0D1B2A;--navy-mid:#162233;--blue:#2563EB;--blue-light:#3B82F6;--blue-pale:#EFF4FF;--cloud:#E8F1FF;--cloud-white:#F7F9FC;--yellow:#FFC84D;--yellow-pale:#FFF8E6;--green:#16A34A;--green-pale:#DCFCE7;--orange:#EA580C;--orange-pale:#FFF0E6;--text-1:#0D1B2A;--text-2:#4B5563;--text-3:#9CA3AF;--border:#E5E7EB;--white:#ffffff;--sidebar-w:240px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:var(--cloud-white);color:var(--text-1);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar-w);background:var(--navy);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0;}
+.sidebar-logo{padding:20px 20px 16px;font-size:18px;font-weight:700;color:white;text-decoration:none;letter-spacing:-0.02em;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sidebar-section-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:20px 16px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:1px 8px;border-radius:7px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.12s;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(37,99,235,0.25);color:white;}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid rgba(255,255,255,0.06);}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:600;color:white;}
+.user-sub{font-size:11px;color:rgba(255,255,255,0.4);}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{position:sticky;top:0;z-index:10;height:56px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.topbar-title{font-size:15px;font-weight:600;}
+.page-content{padding:32px;max-width:880px;}
+.btn-primary{background:var(--blue);color:white;border:none;border-radius:7px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:500;}
+.chip-blue{background:var(--blue-pale);color:var(--blue);}
+.chip-yellow{background:var(--yellow-pale);color:#92400E;}
+.chip-green{background:var(--green-pale);color:var(--green);}
+.chip-white{background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-btn{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:500;border:1px solid var(--border);background:white;color:var(--text-2);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.12s;}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue);}
+.filter-btn.active{background:var(--blue-pale);border-color:var(--blue);color:var(--blue);font-weight:600;}
+.filter-divider{width:1px;height:20px;background:var(--border);}
+.filter-count{font-size:13px;color:var(--text-3);margin-left:auto;}
+
+/* JENI NUDGE */
+.jeni-nudge{background:linear-gradient(135deg,#EFF4FF 0%,#E0ECFF 100%);border:1px solid #bfdbfe;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.jeni-icon{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+.jeni-text{flex:1;font-size:13px;color:var(--text-2);}
+.jeni-text strong{color:var(--text-1);}
+.jeni-cta{font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;text-decoration:none;}
+
+/* JOB CARDS */
+.job-card{background:white;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px;text-decoration:none;color:inherit;display:block;transition:border-color 0.15s,box-shadow 0.15s;}
+.job-card:hover{border-color:var(--blue);box-shadow:0 2px 12px rgba(37,99,235,0.08);}
+.job-card.top-match{border-color:#bfdbfe;background:linear-gradient(180deg,#f8fbff 0%,white 100%);}
+.jc-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.jc-logo{width:44px;height:44px;border-radius:10px;background:var(--cloud-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text-2);flex-shrink:0;}
+.jc-info{flex:1;}
+.jc-role{font-size:15px;font-weight:600;margin-bottom:2px;}
+.jc-company{font-size:13px;color:var(--text-2);margin-bottom:6px;}
+.jc-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.jc-meta-item{font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:4px;}
+.jc-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;}
+.match-pct{font-size:22px;font-weight:700;color:var(--green);}
+.match-pct.high{color:var(--green);}
+.match-pct.mid{color:var(--blue);}
+.match-label{font-size:10px;color:var(--text-3);font-weight:500;text-align:right;}
+.jc-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.new-badge{background:var(--yellow-pale);color:#92400E;font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="askjeni-dashboard.html" class="sidebar-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span></a>
+  <div class="sidebar-section-label">My Journey</div>
+  <a href="askjeni-dashboard.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor"/></svg>
+    Dashboard
+  </a>
+  <a href="askjeni-skills-passport.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L10 6H15L11 9.5L12.5 15L8 12L3.5 15L5 9.5L1 6H6L8 1Z" fill="currentColor"/></svg>
+    Skills Passport
+  </a>
+  <a href="askjeni-learning-path.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Learning Path
+  </a>
+  <a href="askjeni-opportunities.html" class="nav-item active">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5"/></svg>
+    Opportunities
+  </a>
+  <div class="sidebar-section-label">Prepare</div>
+  <a href="askjeni-interview-prep.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm0 11a1 1 0 110-2 1 1 0 010 2zm1-4H7V4h2v4z" fill="currentColor"/></svg>
+    Interview Prep
+  </a>
+  <a href="#" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.5 1 1 3.5 1 7c0 1.8.8 3.4 2 4.5V15l2.5-1.5c.8.3 1.6.5 2.5.5 3.5 0 7-2.5 7-6s-3.5-6-7-6z" fill="currentColor"/></svg>
+    Ask Jeni
+  </a>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-avatar">TN</div>
+      <div><div class="user-name">Thabo Nkosi</div><div class="user-sub">Wits · BSc CS</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Matched Opportunities</div>
+    <span style="font-size:13px;color:var(--text-3)">12 matches · Updated today</span>
+  </div>
+
+  <div class="page-content">
+
+    <div class="jeni-nudge">
+      <div class="jeni-icon">✦</div>
+      <div class="jeni-text"><strong>Verify React to unlock 4 more matches.</strong> Companies filtering for verified React developers can't see you yet — one assessment changes that.</div>
+      <a href="askjeni-assessment.html" class="jeni-cta">Verify now →</a>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="setFilter(this)">All (12)</button>
+      <button class="filter-btn" onclick="setFilter(this)">Full-time (8)</button>
+      <button class="filter-btn" onclick="setFilter(this)">Internship (3)</button>
+      <button class="filter-btn" onclick="setFilter(this)">Remote (5)</button>
+      <div class="filter-divider"></div>
+      <button class="filter-btn" onclick="setFilter(this)">Johannesburg</button>
+      <button class="filter-btn" onclick="setFilter(this)">Cape Town</button>
+      <span class="filter-count">Sorted by match %</span>
+    </div>
+
+    <!-- CARDS -->
+    <a href="askjeni-opportunity-detail.html" class="job-card top-match">
+      <div class="jc-top">
+        <div class="jc-logo">PP</div>
+        <div class="jc-info">
+          <div class="jc-role">Junior Software Engineer</div>
+          <div class="jc-company">Peach Payments · Cape Town</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🏢 Hybrid</span>
+            <span class="jc-meta-item">💰 R22 000 – R26 000 / month</span>
+            <span class="jc-meta-item">📅 Jan 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct high">94%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ React</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-blue" style="font-size:11px">Node.js</span>
+        <span class="chip chip-white" style="font-size:11px">PostgreSQL</span>
+        <span class="new-badge">✦ New</span>
+      </div>
+    </a>
+
+    <a href="askjeni-opportunities.html" class="job-card">
+      <div class="jc-top">
+        <div class="jc-logo">TK</div>
+        <div class="jc-info">
+          <div class="jc-role">Graduate Developer</div>
+          <div class="jc-company">Takealot · Johannesburg</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🏢 Hybrid</span>
+            <span class="jc-meta-item">💰 R20 000 – R24 000 / month</span>
+            <span class="jc-meta-item">📅 Jan 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct high">88%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ Node.js</span>
+        <span class="chip chip-white" style="font-size:11px">Docker</span>
+        <span class="new-badge">✦ New</span>
+      </div>
+    </a>
+
+    <a href="askjeni-opportunities.html" class="job-card">
+      <div class="jc-top">
+        <div class="jc-logo">FN</div>
+        <div class="jc-info">
+          <div class="jc-role">Software Engineer Intern</div>
+          <div class="jc-company">FNB Tech · Johannesburg</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🏢 In-office</span>
+            <span class="jc-meta-item">💰 R16 000 – R18 000 / month</span>
+            <span class="jc-meta-item">📅 Jan 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct mid">82%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ Java</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-white" style="font-size:11px">Spring Boot</span>
+      </div>
+    </a>
+
+    <a href="askjeni-opportunities.html" class="job-card">
+      <div class="jc-top">
+        <div class="jc-logo">SB</div>
+        <div class="jc-info">
+          <div class="jc-role">Junior Backend Developer</div>
+          <div class="jc-company">Shoprite Tech · Cape Town</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🌐 Remote</span>
+            <span class="jc-meta-item">💰 R20 000 – R25 000 / month</span>
+            <span class="jc-meta-item">📅 Mar 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct mid">79%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-white" style="font-size:11px">FastAPI</span>
+        <span class="chip chip-white" style="font-size:11px">PostgreSQL</span>
+      </div>
+    </a>
+
+    <a href="askjeni-opportunities.html" class="job-card">
+      <div class="jc-top">
+        <div class="jc-logo">WC</div>
+        <div class="jc-info">
+          <div class="jc-role">Frontend Developer (Graduate)</div>
+          <div class="jc-company">Woolworths Financial Services · Cape Town</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🏢 Hybrid</span>
+            <span class="jc-meta-item">💰 R19 000 – R23 000 / month</span>
+            <span class="jc-meta-item">📅 Feb 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct mid">76%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ React</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ JavaScript</span>
+        <span class="chip chip-white" style="font-size:11px">TypeScript</span>
+      </div>
+    </a>
+
+    <a href="askjeni-opportunities.html" class="job-card">
+      <div class="jc-top">
+        <div class="jc-logo">NB</div>
+        <div class="jc-info">
+          <div class="jc-role">Software Developer Trainee</div>
+          <div class="jc-company">Nedbank Digital · Johannesburg</div>
+          <div class="jc-meta">
+            <span class="jc-meta-item">🏢 Hybrid</span>
+            <span class="jc-meta-item">💰 R17 000 – R21 000 / month</span>
+            <span class="jc-meta-item">📅 Jan 2026 start</span>
+          </div>
+        </div>
+        <div class="jc-right">
+          <div class="match-pct mid">72%</div>
+          <div class="match-label">match</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-white" style="font-size:11px">SQL</span>
+        <span class="chip chip-white" style="font-size:11px">Azure</span>
+      </div>
+    </a>
+
+    <!-- MORE MATCHES NUDGE -->
+    <div style="background:var(--yellow-pale);border:1px solid #FFC84D;border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;margin-top:8px">
+      <div style="font-size:24px">✦</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:600;margin-bottom:3px">4 more matches are hidden</div>
+        <div style="font-size:13px;color:var(--text-2)">Companies searching for verified React developers can't see your profile yet. Verify React to unlock them.</div>
+      </div>
+      <a href="askjeni-assessment.html" class="btn-primary">Verify React →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function setFilter(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

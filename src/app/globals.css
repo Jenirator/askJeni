@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy:        #0D1B2A;
+  --navy-mid:    #162233;
+  --blue:        #2563EB;
+  --blue-light:  #3B82F6;
+  --blue-pale:   #EFF4FF;
+  --cloud:       #E8F1FF;
+  --cloud-white: #F7F9FC;
+  --yellow:      #FFC84D;
+  --yellow-pale: #FFF8E6;
+  --green:       #16A34A;
+  --green-pale:  #DCFCE7;
+  --orange:      #EA580C;
+  --orange-pale: #FFF0E6;
+  --text-1:      #0D1B2A;
+  --text-2:      #4B5563;
+  --text-3:      #9CA3AF;
+  --border:      #E5E7EB;
+  --white:       #ffffff;
+  --sidebar-w:   240px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-cloud-white text-navy font-sans;
+  }
+}
+
+@layer utilities {
+  /* Hides scrollbar but keeps scroll behaviour */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}

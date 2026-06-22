@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Thabo Nkosi — LinkedIn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:#f3f2ef;color:#000;}
+.back-bar{background:#0a66c2;padding:8px 32px;font-size:12px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;}
+.back-bar a{color:white;text-decoration:none;}
+.li-nav{background:white;height:52px;display:flex;align-items:center;padding:0 24px;gap:8px;border-bottom:1px solid rgba(0,0,0,0.1);position:sticky;top:0;z-index:100;}
+.li-logo{font-size:22px;font-weight:900;color:#0a66c2;margin-right:8px;}
+.li-search{height:34px;background:#eef3f8;border:none;border-radius:4px;padding:0 12px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:260px;color:#666;}
+.li-nav-links{margin-left:auto;display:flex;align-items:center;gap:4px;}
+.li-nav-link{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;font-size:11px;color:#666;text-decoration:none;border-radius:4px;}
+.li-nav-link:hover{color:#000;}
+.li-nav-link span{font-size:20px;}
+.li-cta{background:#0a66c2;color:white;border:none;border-radius:24px;padding:8px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-left:8px;}
+
+.page-wrap{max-width:860px;margin:0 auto;padding:24px 16px;}
+.profile-card{background:white;border-radius:8px;overflow:hidden;margin-bottom:10px;border:1px solid rgba(0,0,0,0.08);}
+
+/* COVER + AVATAR */
+.cover{height:160px;background:linear-gradient(135deg,#0D1B2A 0%,#2563EB 100%);position:relative;}
+.li-avatar{width:120px;height:120px;border-radius:50%;background:#2563EB;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:white;border:4px solid white;position:absolute;bottom:-40px;left:24px;}
+.profile-body{padding:56px 24px 20px;}
+.li-name{font-size:22px;font-weight:700;margin-bottom:2px;}
+.li-headline{font-size:15px;color:#333;margin-bottom:6px;}
+.li-location{font-size:13px;color:#666;margin-bottom:12px;}
+.li-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-connect{background:#0a66c2;color:white;border:none;border-radius:24px;padding:7px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-message{background:white;color:#0a66c2;border:1px solid #0a66c2;border-radius:24px;padding:7px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.li-connections{font-size:13px;color:#0a66c2;font-weight:500;margin-top:10px;}
+
+/* SECTIONS */
+.li-section{background:white;border-radius:8px;padding:20px 24px;margin-bottom:10px;border:1px solid rgba(0,0,0,0.08);}
+.li-section-title{font-size:18px;font-weight:600;margin-bottom:14px;}
+.li-about{font-size:15px;color:#333;line-height:1.65;}
+
+/* EXPERIENCE */
+.li-exp-row{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #f3f2ef;}
+.li-exp-row:last-child{border-bottom:none;}
+.li-exp-logo{width:48px;height:48px;border-radius:4px;background:#eef3f8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#666;flex-shrink:0;}
+.li-exp-info{}
+.li-exp-title{font-size:15px;font-weight:600;}
+.li-exp-company{font-size:13px;color:#666;}
+.li-exp-date{font-size:12px;color:#999;}
+.li-exp-desc{font-size:13px;color:#444;margin-top:4px;line-height:1.5;}
+
+/* EDUCATION */
+.li-edu-row{display:flex;gap:14px;padding:10px 0;}
+.li-edu-logo{width:48px;height:48px;border-radius:4px;background:#eef3f8;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#666;flex-shrink:0;text-align:center;}
+.li-edu-info{}
+.li-edu-school{font-size:15px;font-weight:600;}
+.li-edu-degree{font-size:13px;color:#666;}
+.li-edu-date{font-size:12px;color:#999;}
+
+/* SKILLS */
+.li-skills-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.li-skill{background:#eef3f8;border:1px solid #d0e3f0;border-radius:4px;padding:6px 14px;font-size:13px;font-weight:500;color:#0a66c2;}
+.li-skill.endorsed{border-color:#0a66c2;}
+
+/* OPEN TO WORK */
+.otw-banner{background:#e8f3e8;border:1px solid #c3dfc3;border-radius:8px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.otw-icon{width:40px;height:40px;border-radius:50%;background:#16A34A;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;flex-shrink:0;}
+.otw-text{}
+.otw-text h4{font-size:15px;font-weight:600;color:#16A34A;margin-bottom:2px;}
+.otw-text p{font-size:13px;color:#444;}
+</style>
+</head>
+<body>
+
+<div class="back-bar">← Back to <a href="thabo-public-profile.html">Thabo's askJeni profile</a> · Fictional LinkedIn profile for prototype purposes</div>
+
+<div class="li-nav">
+  <div class="li-logo">in</div>
+  <input class="li-search" placeholder="Search"/>
+  <div class="li-nav-links">
+    <a href="#" class="li-nav-link"><span>🏠</span>Home</a>
+    <a href="#" class="li-nav-link"><span>👥</span>My Network</a>
+    <a href="#" class="li-nav-link"><span>💼</span>Jobs</a>
+    <a href="#" class="li-nav-link"><span>💬</span>Messaging</a>
+    <a href="#" class="li-nav-link"><span>🔔</span>Notifications</a>
+    <a href="#" class="li-nav-link"><span>👤</span>Me</a>
+    <button class="li-cta">Post a job</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="otw-banner">
+    <div class="otw-icon">✓</div>
+    <div class="otw-text">
+      <h4>Open to work</h4>
+      <p>Software Engineer, Graduate Developer, Internship roles · Available from January 2026 · Johannesburg, Cape Town or Remote</p>
+    </div>
+  </div>
+
+  <!-- PROFILE CARD -->
+  <div class="profile-card">
+    <div class="cover"></div>
+    <div class="li-avatar">TN</div>
+    <div class="profile-body">
+      <div class="li-name">Thabo Nkosi</div>
+      <div class="li-headline">Final-year BSc Computer Science @ Wits · Full-Stack Developer · React · Python · Node.js</div>
+      <div class="li-location">Johannesburg, Gauteng, South Africa · <a href="thabo-public-profile.html" style="color:#0a66c2;text-decoration:none">Contact info</a></div>
+      <div class="li-connections">127 connections · <a href="#" style="color:#0a66c2;text-decoration:none">500+ profile views</a></div>
+      <div style="margin-top:12px">
+        <div class="li-actions">
+          <button class="btn-connect">Connect</button>
+          <button class="btn-message">Message</button>
+          <a href="thabo-public-profile.html" style="background:white;color:#0a66c2;border:1px solid #0a66c2;border-radius:24px;padding:7px 18px;font-size:14px;font-weight:600;text-decoration:none">View askJeni profile ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="li-section">
+    <div class="li-section-title">About</div>
+    <div class="li-about">
+      Final-year Computer Science student at Wits with a passion for building tools that solve real South African problems.
+      I've shipped two production projects — my SA Load Shedding Tracker has 1 200+ GitHub stars and is used by residents across Gauteng.
+      <br/><br/>
+      I'm a full-stack developer comfortable with React, Node.js, Python, and FastAPI. Currently doing my final year research project in machine learning.
+      <br/><br/>
+      Available for full-time, internship, or contract roles from January 2026. Prefer hybrid or remote in Johannesburg or Cape Town, but open to relocation.
+      <br/><br/>
+      📍 Johannesburg · 💰 R22 000 / month · ✓ Verified skills on <a href="thabo-public-profile.html" style="color:#0a66c2;text-decoration:none">askJeni</a>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="li-section">
+    <div class="li-section-title">Experience</div>
+    <div class="li-exp-row">
+      <div class="li-exp-logo">LS</div>
+      <div class="li-exp-info">
+        <div class="li-exp-title">Creator &amp; Maintainer — SA Load Shedding Tracker</div>
+        <div class="li-exp-company">Open Source · Self-employed</div>
+        <div class="li-exp-date">Jan 2023 – Present · 1 yr 6 mos</div>
+        <div class="li-exp-desc">Built and maintained a real-time Eskom load shedding schedule tracker used by 1 200+ people. Python backend, React frontend, push notifications via Firebase. 1 243 GitHub stars.</div>
+      </div>
+    </div>
+    <div class="li-exp-row">
+      <div class="li-exp-logo">WTW</div>
+      <div class="li-exp-info">
+        <div class="li-exp-title">Student Tutor — Computer Science</div>
+        <div class="li-exp-company">University of the Witwatersrand</div>
+        <div class="li-exp-date">Feb 2024 – Nov 2024 · 10 mos</div>
+        <div class="li-exp-desc">Tutored 2nd-year students in Data Structures and Algorithms. Ran weekly help sessions and marked assignments. 4.8/5 student rating.</div>
+      </div>
+    </div>
+    <div class="li-exp-row">
+      <div class="li-exp-logo">SS</div>
+      <div class="li-exp-info">
+        <div class="li-exp-title">Creator — StudySync</div>
+        <div class="li-exp-company">Personal Project</div>
+        <div class="li-exp-date">Jun 2023 – Present</div>
+        <div class="li-exp-desc">Real-time collaborative study platform for SA students. React, Node.js, PostgreSQL, Socket.io. Used by study groups at Wits and UCT.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="li-section">
+    <div class="li-section-title">Education</div>
+    <div class="li-edu-row">
+      <div class="li-edu-logo">WITS</div>
+      <div class="li-edu-info">
+        <div class="li-edu-school">University of the Witwatersrand</div>
+        <div class="li-edu-degree">BSc Computer Science · 3rd year</div>
+        <div class="li-edu-date">2023 – 2025 (expected)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="li-section">
+    <div class="li-section-title">Skills</div>
+    <div style="font-size:13px;color:#666;margin-bottom:10px">✓ = verified by askJeni assessment</div>
+    <div class="li-skills-grid">
+      <span class="li-skill endorsed">✓ React</span>
+      <span class="li-skill endorsed">✓ Python</span>
+      <span class="li-skill endorsed">✓ JavaScript</span>
+      <span class="li-skill endorsed">✓ Node.js</span>
+      <span class="li-skill">TypeScript</span>
+      <span class="li-skill">PostgreSQL</span>
+      <span class="li-skill">FastAPI</span>
+      <span class="li-skill">Docker</span>
+      <span class="li-skill">REST APIs</span>
+      <span class="li-skill">Git</span>
+      <span class="li-skill">Data Structures</span>
+      <span class="li-skill">Machine Learning</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

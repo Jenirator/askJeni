@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Junior Software Engineer — Peach Payments — askJeni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0D1B2A;--navy-mid:#162233;--blue:#2563EB;--blue-light:#3B82F6;--blue-pale:#EFF4FF;--cloud:#E8F1FF;--cloud-white:#F7F9FC;--yellow:#FFC84D;--yellow-pale:#FFF8E6;--green:#16A34A;--green-pale:#DCFCE7;--orange:#EA580C;--orange-pale:#FFF0E6;--text-1:#0D1B2A;--text-2:#4B5563;--text-3:#9CA3AF;--border:#E5E7EB;--white:#ffffff;--sidebar-w:240px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:var(--cloud-white);color:var(--text-1);display:flex;min-height:100vh;padding-bottom:80px;}
+.sidebar{width:var(--sidebar-w);background:var(--navy);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0;}
+.sidebar-logo{padding:20px 20px 16px;font-size:18px;font-weight:700;color:white;text-decoration:none;letter-spacing:-0.02em;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sidebar-section-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:20px 16px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:1px 8px;border-radius:7px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.12s;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(37,99,235,0.25);color:white;}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid rgba(255,255,255,0.06);}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:600;color:white;}
+.user-sub{font-size:11px;color:rgba(255,255,255,0.4);}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{position:sticky;top:0;z-index:10;height:56px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.topbar-title{font-size:15px;font-weight:600;}
+.page-content{padding:32px;max-width:880px;}
+.btn-primary{background:var(--blue);color:white;border:none;border-radius:7px;padding:10px 24px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+.btn-secondary{background:var(--blue-pale);color:var(--blue);border:none;border-radius:7px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:500;}
+.chip-blue{background:var(--blue-pale);color:var(--blue);}
+.chip-yellow{background:var(--yellow-pale);color:#92400E;}
+.chip-white{background:var(--cloud-white);color:var(--text-2);border:1px solid var(--border);}
+.card{background:white;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:600;margin-bottom:14px;}
+
+/* ROLE HEADER */
+.role-header{background:white;border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+.rh-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;}
+.company-logo{width:56px;height:56px;border-radius:12px;background:var(--cloud-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-2);flex-shrink:0;}
+.rh-info{flex:1;}
+.role-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px;}
+.company-name{font-size:15px;color:var(--text-2);margin-bottom:10px;}
+.rh-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.meta-item{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:6px;}
+.match-badge{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.match-num{font-size:36px;font-weight:700;color:var(--green);letter-spacing:-0.02em;line-height:1;}
+.match-pct-label{font-size:11px;color:var(--text-3);font-weight:500;}
+
+/* MATCH REASONS */
+.match-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.match-row:last-child{border-bottom:none;}
+.match-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.match-label{flex:1;color:var(--text-2);}
+.match-label strong{color:var(--text-1);}
+.match-check{font-size:12px;font-weight:600;}
+.match-check.yes{color:var(--green);}
+.match-check.partial{color:var(--orange);}
+
+/* TIMELINE */
+.timeline-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.timeline-row:last-child{border-bottom:none;}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.tl-label{flex:1;color:var(--text-2);}
+.tl-date{font-weight:500;color:var(--text-1);}
+
+/* STICKY BAR */
+.sticky-bar{position:fixed;bottom:0;left:var(--sidebar-w);right:0;background:white;border-top:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;z-index:50;box-shadow:0 -4px 24px rgba(0,0,0,0.06);}
+.sticky-role-info{font-size:14px;font-weight:600;}
+.sticky-role-sub{font-size:12px;color:var(--text-3);}
+.sticky-actions{display:flex;gap:10px;}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="askjeni-dashboard.html" class="sidebar-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span></a>
+  <div class="sidebar-section-label">My Journey</div>
+  <a href="askjeni-dashboard.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor"/></svg>
+    Dashboard
+  </a>
+  <a href="askjeni-skills-passport.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L10 6H15L11 9.5L12.5 15L8 12L3.5 15L5 9.5L1 6H6L8 1Z" fill="currentColor"/></svg>
+    Skills Passport
+  </a>
+  <a href="askjeni-learning-path.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Learning Path
+  </a>
+  <a href="askjeni-opportunities.html" class="nav-item active">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.5"/></svg>
+    Opportunities
+  </a>
+  <div class="sidebar-section-label">Prepare</div>
+  <a href="askjeni-interview-prep.html" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.13 1 1 4.13 1 8s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm0 11a1 1 0 110-2 1 1 0 010 2zm1-4H7V4h2v4z" fill="currentColor"/></svg>
+    Interview Prep
+  </a>
+  <a href="#" class="nav-item">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1C4.5 1 1 3.5 1 7c0 1.8.8 3.4 2 4.5V15l2.5-1.5c.8.3 1.6.5 2.5.5 3.5 0 7-2.5 7-6s-3.5-6-7-6z" fill="currentColor"/></svg>
+    Ask Jeni
+  </a>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-avatar">TN</div>
+      <div><div class="user-name">Thabo Nkosi</div><div class="user-sub">Wits · BSc CS</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title"><a href="askjeni-opportunities.html" style="color:var(--text-3);text-decoration:none">Opportunities</a> <span style="color:var(--border)">›</span> Junior Software Engineer</div>
+    <a href="askjeni-opportunities.html" style="font-size:13px;color:var(--text-2);text-decoration:none">← Back to list</a>
+  </div>
+
+  <div class="page-content">
+
+    <!-- ROLE HEADER -->
+    <div class="role-header">
+      <div class="rh-top">
+        <div class="company-logo">PP</div>
+        <div class="rh-info">
+          <div class="role-title">Junior Software Engineer</div>
+          <div class="company-name">Peach Payments · Cape Town, Western Cape</div>
+          <div class="rh-meta">
+            <span class="meta-item">🏢 Hybrid (3 days office)</span>
+            <span class="meta-item">💰 R22 000 – R26 000 / month</span>
+            <span class="meta-item">📅 Start Jan 2026</span>
+            <span class="meta-item">⏳ Full-time</span>
+          </div>
+        </div>
+        <div class="match-badge">
+          <div class="match-num">94%</div>
+          <div class="match-pct-label">match</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="chip chip-blue" style="font-size:11px">✓ React</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ Node.js</span>
+        <span class="chip chip-blue" style="font-size:11px">✓ Python</span>
+        <span class="chip chip-white" style="font-size:11px">PostgreSQL</span>
+        <span class="chip chip-white" style="font-size:11px">TypeScript</span>
+        <span style="margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--green);font-weight:600;background:var(--green-pale);padding:4px 10px;border-radius:20px">✓ Salary match: R22 000</span>
+      </div>
+    </div>
+
+    <!-- TWO-COL -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+      <!-- WHY YOU MATCH -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">Why you match — 94%</div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--green-pale)">💰</div>
+          <span class="match-label"><strong>Salary</strong> — Your R22 000 is within their R22k–R26k range</span>
+          <span class="match-check yes">✓</span>
+        </div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--green-pale)">⚛️</div>
+          <span class="match-label"><strong>React</strong> — verified, 87/100 on assessment</span>
+          <span class="match-check yes">✓</span>
+        </div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--green-pale)">🐍</div>
+          <span class="match-label"><strong>Python</strong> — verified, 91/100 on assessment</span>
+          <span class="match-check yes">✓</span>
+        </div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--green-pale)">📅</div>
+          <span class="match-label"><strong>Availability</strong> — Jan 2026 matches their start date</span>
+          <span class="match-check yes">✓</span>
+        </div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--green-pale)">🏢</div>
+          <span class="match-label"><strong>Work type</strong> — hybrid is in your preferences</span>
+          <span class="match-check yes">✓</span>
+        </div>
+        <div class="match-row">
+          <div class="match-icon" style="background:var(--orange-pale)">📍</div>
+          <span class="match-label"><strong>Location</strong> — Cape Town (you're in JHB, willing to relocate)</span>
+          <span class="match-check partial">~</span>
+        </div>
+      </div>
+
+      <!-- HIRING TIMELINE -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">Hiring timeline</div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--green)"></div>
+          <span class="tl-label">Applications open</span>
+          <span class="tl-date">Now</span>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--blue)"></div>
+          <span class="tl-label">Applications close</span>
+          <span class="tl-date">15 Jul 2026</span>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--border)"></div>
+          <span class="tl-label">Screening interviews</span>
+          <span class="tl-date">Late Jul 2026</span>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--border)"></div>
+          <span class="tl-label">Technical assessment</span>
+          <span class="tl-date">Aug 2026</span>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--border)"></div>
+          <span class="tl-label">Offers sent</span>
+          <span class="tl-date">Sep 2026</span>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-dot" style="background:var(--yellow)"></div>
+          <span class="tl-label">Start date</span>
+          <span class="tl-date">Jan 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROLE DESCRIPTION -->
+    <div class="card">
+      <div class="card-title">About the role</div>
+      <p style="font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px">
+        Peach Payments is South Africa's leading payments infrastructure company, processing billions of Rands in transactions annually for merchants across Africa. Our engineering team builds the systems that keep online commerce running.
+      </p>
+      <p style="font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px">
+        As a Junior Software Engineer you'll join a small, cross-functional squad working on our merchant-facing dashboard and API integrations. You'll be shipping real code in your first week — we don't do "grunt work" probation periods.
+      </p>
+      <div style="font-size:14px;font-weight:600;margin-bottom:10px">You'll be working on:</div>
+      <ul style="font-size:14px;color:var(--text-2);line-height:1.8;padding-left:20px">
+        <li>React-based merchant dashboard features</li>
+        <li>Node.js and Python API services</li>
+        <li>Payment webhook processing and event handling</li>
+        <li>Internal tooling to help the support team resolve merchant queries faster</li>
+      </ul>
+    </div>
+
+    <!-- REQUIREMENTS -->
+    <div class="card">
+      <div class="card-title">What they're looking for</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:600">✓</span> React experience</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:600">✓</span> Node.js or Python backend</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:600">✓</span> Graduating by end of 2025</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-weight:600">✓</span> At least one shipped project</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0"><span style="color:var(--orange);font-weight:600">~</span> Cape Town or willing to relocate</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 0"><span style="color:var(--text-3)">○</span> SQL / PostgreSQL (nice to have)</div>
+      </div>
+    </div>
+
+    <!-- JENI TIP -->
+    <div style="background:linear-gradient(135deg,#EFF4FF 0%,#E0ECFF 100%);border:1px solid #bfdbfe;border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div style="width:36px;height:36px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">✦</div>
+      <div style="flex:1">
+        <strong style="font-size:14px;display:block;margin-bottom:2px">Prep before you express interest</strong>
+        <span style="font-size:13px;color:var(--text-2)">Peach Payments' technical screen focuses heavily on React performance and API design. Run through the Interview Prep module for Peach Payments before clicking Express interest.</span>
+      </div>
+      <a href="askjeni-interview-prep.html" style="font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;text-decoration:none">Prep now →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar">
+  <div>
+    <div class="sticky-role-info">Junior Software Engineer · Peach Payments</div>
+    <div class="sticky-role-sub">R22 000 – R26 000 / month · Cape Town · Hybrid · 94% match</div>
+  </div>
+  <div class="sticky-actions">
+    <button class="btn-secondary">Save role</button>
+    <a href="askjeni-opportunities.html" class="btn-primary">Express interest →</a>
+  </div>
+</div>
+
+</body>
+</html>

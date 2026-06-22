@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>askJeni — Developer Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#0D1B2A;--blue:#2563EB;--blue-light:#3B82F6;--blue-pale:#EFF4FF;--yellow:#FFC84D;--green:#16A34A;--green-pale:#DCFCE7;--text-1:#0D1B2A;--text-2:#4B5563;--text-3:#9CA3AF;--border:#E5E7EB;--cloud-white:#F7F9FC;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;background:var(--cloud-white);color:var(--text-1);min-height:100vh;}
+
+nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;gap:0;min-height:52px;flex-wrap:wrap;}
+.nav-logo{font-size:17px;font-weight:700;color:white;text-decoration:none;letter-spacing:-0.02em;margin-right:20px;padding:14px 0;}
+.nav-section-label{font-size:10px;font-weight:600;letter-spacing:0.1em;color:rgba(255,255,255,0.25);text-transform:uppercase;padding:0 6px 0 14px;border-left:1px solid rgba(255,255,255,0.1);margin-left:8px;}
+.nav-section-label:first-of-type{border-left:none;margin-left:0;}
+.nav-link{font-size:12px;font-weight:500;color:rgba(255,255,255,0.55);text-decoration:none;padding:6px 10px;border-radius:5px;margin:0 1px;white-space:nowrap;transition:all 0.12s;}
+.nav-link:hover{background:rgba(255,255,255,0.08);color:white;}
+.nav-link.active{background:rgba(37,99,235,0.3);color:white;}
+.nav-link.employer{color:rgba(255,200,77,0.7);}
+.nav-link.employer:hover{background:rgba(255,200,77,0.1);color:var(--yellow);}
+.nav-link.persona{color:rgba(134,239,172,0.7);}
+.nav-link.persona:hover{background:rgba(134,239,172,0.08);color:#86efac;}
+
+.frame-wrap{width:100%;height:calc(100vh - 52px);}
+iframe{width:100%;height:100%;border:none;display:block;}
+
+/* HERO when no frame selected */
+.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100vh - 52px);text-align:center;padding:40px;}
+.hero h1{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;}
+.hero p{font-size:15px;color:var(--text-2);max-width:480px;margin-bottom:32px;line-height:1.6;}
+.screen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:720px;width:100%;}
+.screen-btn{background:white;border:1px solid var(--border);border-radius:10px;padding:16px;text-align:left;text-decoration:none;color:var(--text-1);transition:border-color 0.15s;}
+.screen-btn:hover{border-color:var(--blue);}
+.screen-btn .label{font-size:13px;font-weight:600;margin-bottom:3px;}
+.screen-btn .sub{font-size:12px;color:var(--text-3);}
+.screen-btn .tag{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:6px;display:inline-block;}
+.tag-student{background:var(--blue-pale);color:var(--blue);}
+.tag-employer{background:#FFF8E6;color:#92400E;}
+.tag-persona{background:var(--green-pale);color:var(--green);}
+.tag-public{background:var(--cloud-white);color:var(--text-3);border:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="askjeni-unified.html" class="nav-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span> <span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.25);margin-left:6px">dev preview</span></a>
+
+  <span class="nav-section-label">Public</span>
+  <a href="#" class="nav-link" onclick="load('askjeni-landing.html',this)">Landing</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-register.html',this)">Register</a>
+
+  <span class="nav-section-label">Student</span>
+  <a href="#" class="nav-link" onclick="load('askjeni-dashboard.html',this)">Dashboard</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-skills-passport.html',this)">Skills Passport</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-learning-path.html',this)">Learning Path</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-opportunities.html',this)">Opportunities</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-opportunity-detail.html',this)">Role Detail</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-assessment.html',this)">Assessment</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-assessment-results.html',this)">Results</a>
+  <a href="#" class="nav-link" onclick="load('askjeni-interview-prep.html',this)">Interview Prep</a>
+
+  <span class="nav-section-label">Employer</span>
+  <a href="#" class="nav-link employer" onclick="load('askjeni-employer-browse.html',this)">Browse Candidates</a>
+
+  <span class="nav-section-label">Personas</span>
+  <a href="#" class="nav-link persona" onclick="load('thabo-public-profile.html',this)">Thabo — Public Profile</a>
+  <a href="#" class="nav-link persona" onclick="load('thabo-github.html',this)">Thabo — GitHub</a>
+  <a href="#" class="nav-link persona" onclick="load('thabo-linkedin.html',this)">Thabo — LinkedIn</a>
+</nav>
+
+<div class="frame-wrap" id="frame-wrap">
+  <div class="hero" id="hero">
+    <h1>askJeni — Developer Preview</h1>
+    <p>All screens linked in the nav above. Click any screen to load it in the frame below. Every screen is interlinked — navigate freely between them.</p>
+    <div class="screen-grid">
+      <a href="#" class="screen-btn" onclick="load('askjeni-landing.html',null);return false">
+        <div class="tag tag-public">Public</div>
+        <div class="label">Landing page</div>
+        <div class="sub">Waitlist &amp; marketing</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-register.html',null);return false">
+        <div class="tag tag-public">Public</div>
+        <div class="label">Registration</div>
+        <div class="sub">4-step onboarding flow</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-dashboard.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Dashboard</div>
+        <div class="sub">Logged-in home</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-skills-passport.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Skills Passport</div>
+        <div class="sub">Profile &amp; assessments</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-learning-path.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Learning Path</div>
+        <div class="sub">5-milestone roadmap</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-opportunities.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Opportunities</div>
+        <div class="sub">Matched roles list</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-opportunity-detail.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Role Detail</div>
+        <div class="sub">Peach Payments — 94% match</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-assessment.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Assessment</div>
+        <div class="sub">In-progress — timer &amp; map</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-assessment-results.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Results</div>
+        <div class="sub">87/100 — verified badge</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-interview-prep.html',null);return false">
+        <div class="tag tag-student">Student</div>
+        <div class="label">Interview Prep</div>
+        <div class="sub">3 tracks + Jeni mock</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('askjeni-employer-browse.html',null);return false">
+        <div class="tag tag-employer">Employer</div>
+        <div class="label">Browse Candidates</div>
+        <div class="sub">Filter sidebar + 6 cards</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('thabo-public-profile.html',null);return false">
+        <div class="tag tag-persona">Persona</div>
+        <div class="label">Thabo — Public Profile</div>
+        <div class="sub">Shareable URL</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('thabo-github.html',null);return false">
+        <div class="tag tag-persona">Persona</div>
+        <div class="label">Thabo — GitHub</div>
+        <div class="sub">Fictional profile</div>
+      </a>
+      <a href="#" class="screen-btn" onclick="load('thabo-linkedin.html',null);return false">
+        <div class="tag tag-persona">Persona</div>
+        <div class="label">Thabo — LinkedIn</div>
+        <div class="sub">Fictional profile</div>
+      </a>
+    </div>
+  </div>
+  <iframe id="preview-frame" style="display:none"></iframe>
+</div>
+
+<script>
+function load(url, linkEl) {
+  document.getElementById('hero').style.display = 'none';
+  const frame = document.getElementById('preview-frame');
+  frame.style.display = 'block';
+  frame.src = url;
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  if (linkEl) linkEl.classList.add('active');
+  return false;
+}
+</script>
+
+</body>
+</html>

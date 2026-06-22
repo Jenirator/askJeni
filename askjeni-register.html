@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create your Skills Passport — askJeni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:        #0D1B2A;
+  --navy-mid:    #162233;
+  --blue:        #2563EB;
+  --blue-light:  #3B82F6;
+  --blue-pale:   #EFF4FF;
+  --cloud:       #E8F1FF;
+  --cloud-white: #F7F9FC;
+  --yellow:      #FFC84D;
+  --yellow-pale: #FFF8E6;
+  --green:       #16A34A;
+  --green-pale:  #DCFCE7;
+  --orange:      #EA580C;
+  --orange-pale: #FFF0E6;
+  --text-1:      #0D1B2A;
+  --text-2:      #4B5563;
+  --text-3:      #9CA3AF;
+  --border:      #E5E7EB;
+  --white:       #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background: var(--cloud-white); color: var(--text-1); min-height: 100vh; }
+
+nav {
+  background: var(--navy);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+.nav-logo { font-size: 18px; font-weight: 700; color: white; text-decoration: none; letter-spacing: -0.02em; }
+.nav-back { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; }
+.nav-back:hover { color: rgba(255,255,255,0.8); }
+
+.register-wrap {
+  display: flex;
+  min-height: calc(100vh - 52px);
+}
+
+/* LEFT PANEL */
+.reg-left {
+  width: 340px;
+  background: var(--navy);
+  padding: 48px 36px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.reg-left-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.reg-left-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.55;
+  margin-bottom: 40px;
+}
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+.step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 28px;
+  position: relative;
+}
+.step-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 17px; top: 36px;
+  width: 2px; bottom: 0;
+  background: rgba(255,255,255,0.08);
+}
+.step-dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.step-dot.done { background: var(--green); color: white; }
+.step-dot.active { background: var(--blue); color: white; }
+.step-dot.upcoming { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); }
+.step-info { padding-top: 8px; }
+.step-label { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
+.step-label.upcoming { color: rgba(255,255,255,0.35); }
+.step-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.4; }
+
+.jeni-aside {
+  margin-top: auto;
+  background: rgba(255,200,77,0.08);
+  border: 1px solid rgba(255,200,77,0.2);
+  border-radius: 10px;
+  padding: 16px;
+}
+.jeni-aside-label { font-size: 11px; font-weight: 600; color: var(--yellow); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.jeni-aside p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+/* RIGHT PANEL */
+.reg-right {
+  flex: 1;
+  padding: 48px 56px;
+  overflow-y: auto;
+}
+.step-panel { display: none; }
+.step-panel.active { display: block; }
+
+.step-heading { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+.step-subheading { font-size: 15px; color: var(--text-2); margin-bottom: 36px; line-height: 1.5; }
+
+/* FORM ELEMENTS */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.label-hint { font-size: 12px; font-weight: 400; color: var(--text-3); margin-left: 6px; }
+input[type="text"], input[type="email"], input[type="number"], select, textarea {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-1);
+  background: white;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+textarea { height: 80px; padding: 10px 12px; resize: vertical; }
+.input-prefix {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  overflow: hidden;
+  height: 40px;
+}
+.input-prefix-label {
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: var(--cloud-white);
+  border-right: 1px solid var(--border);
+  height: 100%;
+  display: flex; align-items: center;
+  white-space: nowrap;
+}
+.input-prefix input {
+  flex: 1;
+  border: none;
+  height: 100%;
+  border-radius: 0;
+  padding: 0 12px;
+}
+
+/* TECH STACK TILES */
+.stack-section-label { font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; margin-top: 24px; }
+.stack-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.skill-tile {
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-2);
+  transition: all 0.12s;
+  user-select: none;
+}
+.skill-tile:hover { border-color: var(--blue); color: var(--blue); }
+.skill-tile.learning { background: var(--yellow-pale); border-color: #FFC84D; color: #92400E; }
+.skill-tile.confident { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); }
+.stack-legend { display: flex; gap: 16px; margin-bottom: 20px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+.stack-counter { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.stack-counter span { font-weight: 600; color: var(--text-1); }
+
+/* SALARY SECTION */
+.salary-display {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.salary-amount { font-size: 32px; font-weight: 700; color: white; letter-spacing: -0.02em; }
+.salary-label { font-size: 13px; color: rgba(255,255,255,0.4); }
+.salary-badge {
+  background: var(--green-pale);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* WORK TYPE TOGGLES */
+.toggle-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.toggle-btn {
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-2);
+  transition: all 0.12s;
+  font-family: 'Inter', sans-serif;
+}
+.toggle-btn.selected { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); }
+
+/* NAV BUTTONS */
+.step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.btn-back {
+  background: none;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.btn-next {
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.btn-next:hover { background: var(--blue-light); }
+
+/* COMPLETION SCREEN */
+.complete-screen {
+  text-align: center;
+  padding: 40px 0;
+}
+.complete-icon {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 24px;
+}
+.complete-screen h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.complete-screen p { font-size: 15px; color: var(--text-2); max-width: 400px; margin: 0 auto 32px; line-height: 1.55; }
+.complete-actions { display: flex; gap: 12px; justify-content: center; }
+.btn-primary { background: var(--blue); color: white; border: none; border-radius: 7px; padding: 11px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; display: inline-block; }
+.btn-secondary { background: var(--blue-pale); color: var(--blue); border: none; border-radius: 7px; padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; display: inline-block; }
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 36px;
+  overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.3s; }
+
+/* POPIA notice */
+.popia-note { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: 12px; }
+.popia-note a { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="askjeni-landing.html" class="nav-logo">ask<span style="color:var(--blue-light)">jeni</span><span style="color:var(--yellow)"> ✦</span></a>
+  <a href="askjeni-landing.html" class="nav-back">← Back to home</a>
+</nav>
+
+<div class="register-wrap">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="reg-left">
+    <div class="reg-left-title">Build your Skills Passport</div>
+    <div class="reg-left-sub">Four quick steps and your profile is live. Takes about 10 minutes.</div>
+
+    <div class="steps-list">
+      <div class="step-row" id="sidebar-step-1">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-info">
+          <div class="step-label" id="label-1">Your basics</div>
+          <div class="step-desc">Name, institution, degree</div>
+        </div>
+      </div>
+      <div class="step-row" id="sidebar-step-2">
+        <div class="step-dot upcoming" id="dot-2">2</div>
+        <div class="step-info">
+          <div class="step-label upcoming" id="label-2">Tech stack</div>
+          <div class="step-desc">Skills you know and are learning</div>
+        </div>
+      </div>
+      <div class="step-row" id="sidebar-step-3">
+        <div class="step-dot upcoming" id="dot-3">3</div>
+        <div class="step-info">
+          <div class="step-label upcoming" id="label-3">Salary &amp; availability</div>
+          <div class="step-desc">Your number, upfront and honest</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-dot upcoming" id="dot-4">4</div>
+        <div class="step-info">
+          <div class="step-label upcoming" id="label-4">Passport ready</div>
+          <div class="step-desc">Review and go live</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="jeni-aside">
+      <div class="jeni-aside-label">✦ Jeni says</div>
+      <p id="jeni-aside-text">Students who add a salary expectation get 3× more recruiter views. It's the signal that unlocks the match.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT CONTENT -->
+  <div class="reg-right">
+
+    <!-- STEP 1: BASICS -->
+    <div class="step-panel active" id="panel-1">
+      <div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
+      <div class="step-heading">Let's start with the basics</div>
+      <div class="step-subheading">Tell us about yourself and where you're studying. This is the foundation of your Skills Passport.</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" placeholder="Thabo" value="Thabo"/>
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" placeholder="Nkosi" value="Nkosi"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Student email</label>
+        <input type="email" placeholder="thabo@students.wits.ac.za" value="thabo@students.wits.ac.za"/>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Institution</label>
+          <select>
+            <option>University of the Witwatersrand</option>
+            <option>UCT</option>
+            <option>Stellenbosch University</option>
+            <option>University of Pretoria</option>
+            <option>UJ</option>
+            <option>CPUT</option>
+            <option>Rhodes University</option>
+            <option>TUT</option>
+            <option>DUT</option>
+            <option>WeThinkCode_</option>
+            <option>HyperionDev</option>
+            <option>CodeSpace</option>
+            <option>Boolean</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Degree / Programme</label>
+          <input type="text" placeholder="BSc Computer Science" value="BSc Computer Science"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Year of study</label>
+          <select>
+            <option>1st year</option>
+            <option>2nd year</option>
+            <option selected>3rd year</option>
+            <option>4th year / Honours</option>
+            <option>Masters</option>
+            <option>Recent graduate (≤ 1 year)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Expected graduation</label>
+          <select>
+            <option>June 2025</option>
+            <option selected>November 2025</option>
+            <option>June 2026</option>
+            <option>November 2026</option>
+            <option>2027 or later</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>City / Province</label>
+        <select>
+          <option>Johannesburg, Gauteng</option>
+          <option>Cape Town, Western Cape</option>
+          <option>Pretoria, Gauteng</option>
+          <option>Durban, KwaZulu-Natal</option>
+          <option>Stellenbosch, Western Cape</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>GitHub <span class="label-hint">optional — adds credibility</span></label>
+        <div class="input-prefix">
+          <span class="input-prefix-label">github.com/</span>
+          <input type="text" placeholder="thabonkosi" value="thabonkosi"/>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <div></div>
+        <button class="btn-next" onclick="goToStep(2)">Next: Tech stack →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: TECH STACK -->
+    <div class="step-panel" id="panel-2">
+      <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+      <div class="step-heading">What's in your tech stack?</div>
+      <div class="step-subheading">Select up to 8 skills. One tap = learning (still building it). Two taps = confident (you'd back yourself). Confident skills unlock assessment recommendations.</div>
+
+      <div class="stack-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:white;border:1px solid var(--border)"></div> Not selected</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-pale);border:1px solid #FFC84D"></div> Learning</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-pale);border:1px solid var(--blue)"></div> Confident</div>
+      </div>
+
+      <div class="stack-section-label">Languages</div>
+      <div class="stack-grid">
+        <div class="skill-tile" onclick="toggleSkill(this)">JavaScript</div>
+        <div class="skill-tile confident" onclick="toggleSkill(this)">Python</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">TypeScript</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Java</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">C++</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">C#</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Go</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Rust</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">PHP</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Kotlin</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Swift</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">R</div>
+      </div>
+
+      <div class="stack-section-label">Frontend</div>
+      <div class="stack-grid">
+        <div class="skill-tile confident" onclick="toggleSkill(this)">React</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Vue.js</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Angular</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Next.js</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">HTML/CSS</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Tailwind CSS</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">React Native</div>
+      </div>
+
+      <div class="stack-section-label">Backend &amp; APIs</div>
+      <div class="stack-grid">
+        <div class="skill-tile confident" onclick="toggleSkill(this)">Node.js</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">FastAPI</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Django</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Spring Boot</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Express.js</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">GraphQL</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">REST APIs</div>
+      </div>
+
+      <div class="stack-section-label">Data &amp; Databases</div>
+      <div class="stack-grid">
+        <div class="skill-tile learning" onclick="toggleSkill(this)">PostgreSQL</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">MySQL</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">MongoDB</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Redis</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">SQL</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Pandas</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">TensorFlow</div>
+      </div>
+
+      <div class="stack-section-label">Infrastructure &amp; Tools</div>
+      <div class="stack-grid">
+        <div class="skill-tile learning" onclick="toggleSkill(this)">Docker</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Git</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Linux</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">AWS</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">GCP</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">Azure</div>
+        <div class="skill-tile" onclick="toggleSkill(this)">CI/CD</div>
+      </div>
+
+      <div class="stack-counter">Selected: <span id="skill-count">5</span> / 8</div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(1)">← Back</button>
+        <button class="btn-next" onclick="goToStep(3)">Next: Salary &amp; availability →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: SALARY & AVAILABILITY -->
+    <div class="step-panel" id="panel-3">
+      <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+      <div class="step-heading">Set your number upfront</div>
+      <div class="step-subheading">This is what puts you in control of the salary conversation. You set it once and every recruiter who finds you sees it. No awkward negotiations from zero.</div>
+
+      <div class="salary-display">
+        <div>
+          <div class="salary-label">Your monthly salary expectation</div>
+          <div class="salary-amount" id="salary-preview">R22 000</div>
+        </div>
+        <div class="salary-badge">Graduate range</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Expected monthly salary <span class="label-hint">in Rand</span></label>
+          <div class="input-prefix">
+            <span class="input-prefix-label">R</span>
+            <input type="number" id="salary-input" placeholder="22000" value="22000" min="8000" max="80000" oninput="updateSalary(this.value)"/>
+          </div>
+          <span style="font-size:12px;color:var(--text-3);margin-top:4px">SA graduate range: R14 000 – R35 000 / month</span>
+        </div>
+        <div class="form-group">
+          <label>Available from</label>
+          <select>
+            <option>Immediately</option>
+            <option>1 month notice</option>
+            <option selected>January 2026</option>
+            <option>March 2026</option>
+            <option>June 2026</option>
+            <option>After graduation</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Work type preference <span class="label-hint">select all that apply</span></label>
+        <div class="toggle-group">
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Full-time</button>
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Internship</button>
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Contract</button>
+          <button class="toggle-btn" onclick="toggleBtn(this)">Part-time</button>
+          <button class="toggle-btn" onclick="toggleBtn(this)">Vacation work</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Work location preference</label>
+        <div class="toggle-group">
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Hybrid</button>
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Remote</button>
+          <button class="toggle-btn" onclick="toggleBtn(this)">In-office</button>
+          <button class="toggle-btn selected" onclick="toggleBtn(this)">Willing to relocate</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:8px">
+        <label>Preferred location <span class="label-hint">optional — leave blank to be open nationally</span></label>
+        <select>
+          <option>Open to anywhere in SA</option>
+          <option selected>Johannesburg, Gauteng</option>
+          <option>Cape Town, Western Cape</option>
+          <option>Pretoria, Gauteng</option>
+          <option>Durban, KwaZulu-Natal</option>
+        </select>
+      </div>
+
+      <p class="popia-note">Your salary expectation is visible to employers on your profile. You can update or hide it at any time from your settings. All data is handled in accordance with POPIA. <a href="#">Privacy policy →</a></p>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(2)">← Back</button>
+        <button class="btn-next" onclick="goToStep(4)">Next: Review &amp; go live →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: COMPLETE -->
+    <div class="step-panel" id="panel-4">
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="complete-screen">
+        <div class="complete-icon">🎉</div>
+        <h2>Your passport is ready, Thabo</h2>
+        <p>You're on the waitlist and your Skills Passport is live. Jeni will guide you through the next steps to unlock your first matches.</p>
+        <div class="complete-actions">
+          <a href="askjeni-dashboard.html" class="btn-primary">Go to my dashboard →</a>
+          <a href="thabo-public-profile.html" class="btn-secondary">Preview my profile</a>
+        </div>
+
+        <div style="margin-top:40px;padding:20px;background:var(--yellow-pale);border:1px solid #FFC84D;border-radius:12px;text-align:left">
+          <div style="font-size:12px;font-weight:600;color:#92400E;margin-bottom:8px">✦ Jeni's next step for you</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:4px">Take the Python assessment to get your first verified badge</div>
+          <div style="font-size:13px;color:var(--text-2)">Your passport shows Python as confident. One 20-question assessment turns that into a verified badge — and verified skills get 4× more recruiter attention.</div>
+          <a href="askjeni-assessment.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--blue)">Start assessment →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let currentStep = 1;
+
+function goToStep(n) {
+  document.getElementById('panel-' + currentStep).classList.remove('active');
+  document.getElementById('panel-' + n).classList.add('active');
+
+  const dots = ['dot-1','dot-2','dot-3','dot-4'];
+  const labels = ['label-1','label-2','label-3','label-4'];
+
+  dots.forEach((id, i) => {
+    const el = document.getElementById(id);
+    const lbl = document.getElementById(id.replace('dot','label'));
+    const step = i + 1;
+    if (step < n) {
+      el.className = 'step-dot done';
+      el.textContent = '✓';
+    } else if (step === n) {
+      el.className = 'step-dot active';
+      el.textContent = step;
+    } else {
+      el.className = 'step-dot upcoming';
+      el.textContent = step;
+    }
+    if (lbl) {
+      lbl.classList.toggle('upcoming', step > n);
+    }
+  });
+
+  const tips = [
+    'Students who add a salary expectation get 3× more recruiter views. It\'s the signal that unlocks the match.',
+    'Mark skills as "Confident" to unlock assessment recommendations. Verified skills carry 4× more weight with recruiters.',
+    'This is what puts you in control of the salary conversation. Set it once, never answer that question cold again.',
+    'Sorted! Your passport is live. Take an assessment next to get your first verified badge.'
+  ];
+  const jeniEl = document.getElementById('jeni-aside-text');
+  if (jeniEl) jeniEl.textContent = tips[n - 1];
+
+  currentStep = n;
+}
+
+function toggleSkill(el) {
+  const states = ['', 'learning', 'confident'];
+  const current = el.classList.contains('confident') ? 2 : el.classList.contains('learning') ? 1 : 0;
+
+  // Count current selections (learning + confident)
+  const allTiles = document.querySelectorAll('.skill-tile');
+  let count = 0;
+  allTiles.forEach(t => { if (t.classList.contains('learning') || t.classList.contains('confident')) count++; });
+
+  const next = (current + 1) % 3;
+
+  // If adding and already at 8, block
+  if (next > 0 && current === 0 && count >= 8) return;
+
+  el.classList.remove('learning', 'confident');
+  if (next === 1) el.classList.add('learning');
+  if (next === 2) el.classList.add('confident');
+
+  // Recount
+  count = 0;
+  allTiles.forEach(t => { if (t.classList.contains('learning') || t.classList.contains('confident')) count++; });
+  document.getElementById('skill-count').textContent = count;
+}
+
+function toggleBtn(el) {
+  el.classList.toggle('selected');
+}
+
+function updateSalary(val) {
+  const n = parseInt(val);
+  if (!isNaN(n)) {
+    const formatted = n.toLocaleString('en-ZA').replace(/,/g, ' ');
+    document.getElementById('salary-preview').textContent = 'R' + formatted;
+  }
+}
+</script>
+
+</body>
+</html>
