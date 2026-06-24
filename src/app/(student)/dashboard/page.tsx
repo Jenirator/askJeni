@@ -1,229 +1,321 @@
-import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { redirect } from 'next/navigation'
-import { SkillLevel } from '@prisma/client'
-import { computePassportCompletion, formatRand } from '@/lib/utils'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { loadStudent, type StoredStudent } from '@/lib/student-store'
+import ProfileBoostPanel from '@/components/student/ProfileBoostPanel'
+import {
+  MOCK_STUDENT,
+  MOCK_SKILLS,
+  MOCK_MATCHES,
+  MOCK_ASSESSMENTS_COMPLETED,
+  MOCK_ASSESSMENTS_AVAILABLE,
+  MOCK_PROFILE_VIEWS,
+} from '@/lib/mock-data'
 import Link from 'next/link'
+import { TrendingUp, Eye, BadgeCheck, ChevronRight } from 'lucide-react'
 
-export const metadata = { title: 'Dashboard' }
+const COMPANY_COLORS = [
+  'bg-[#2563EB]', 'bg-[#7C3AED]', 'bg-[#059669]',
+  'bg-[#DC2626]', 'bg-[#D97706]', 'bg-[#0891B2]',
+]
 
-export default async function DashboardPage() {
-  const session = await auth()
-  if (!session?.user?.id) redirect('/login')
+function companyColor(name: string) {
+  let h = 0
+  for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff
+  return COMPANY_COLORS[h % COMPANY_COLORS.length]
+}
 
-  const profile = await prisma.studentProfile.findUnique({
-    where: { userId: session.user.id },
-    include: {
-      user: true,
-      skills: { include: { skill: true } },
-      projects: true,
-      matches: {
-        include: { opportunity: { include: { employer: { include: { user: true } } } } },
-        orderBy: { score: 'desc' },
-        take: 4,
-      },
-    },
-  })
+const CHECKLIST = (stored: StoredStudent | null) => stored ? [
+  { label: 'Add your institution & degree', done: !!stored.institution && !!stored.degree },
+  { label: 'Select your tech stack', done: Object.keys(stored.skills).length > 0 },
+  { label: 'Add your first project', done: false },
+  { label: 'Set salary & availability', done: !!stored.salaryExpectation && !!stored.availableFrom },
+  { label: 'Verify at least one skill', done: false },
+  { label: 'Add a second project', done: false },
+] : Array(6).fill({ done: true })
 
-  if (!profile) redirect('/register')
+export default function DashboardPage() {
+  const [stored, setStored] = useState<StoredStudent | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [showBoost, setShowBoost] = useState(false)
 
-  const assessmentAttempts = await prisma.assessmentAttempt.findMany({
-    where: { userId: session.user.id, status: 'COMPLETED' },
-    include: { assessment: true },
-    orderBy: { completedAt: 'desc' },
-  })
+  useEffect(() => { setStored(loadStudent()); setMounted(true) }, [])
+  if (!mounted) return null
 
-  const availableAssessments = await prisma.assessment.findMany({
-    where: { isPublished: true },
-    take: 4,
-  })
+  const firstName = stored ? stored.firstName : MOCK_STUDENT.name.split(' ')[0]
+  const name = stored ? `${stored.firstName} ${stored.lastName}` : MOCK_STUDENT.name
+  const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+  const degree = stored?.degree || MOCK_STUDENT.degree
+  const institution = stored?.institution || MOCK_STUDENT.institution
+  const score = stored?.passportCompletion ?? MOCK_STUDENT.passportCompletion
+  const verifiedSkills = MOCK_SKILLS.filter(s => s.level === 'VERIFIED')
+  const checklist = CHECKLIST(stored)
+  const views = stored ? 0 : MOCK_PROFILE_VIEWS
+  const skillCount = stored ? Object.keys(stored.skills).length : verifiedSkills.length
+  const nextTask = checklist.find(c => !c.done)
 
-  const score = computePassportCompletion(profile)
-  const verifiedSkills = profile.skills.filter(s => s.level === SkillLevel.VERIFIED)
-  const completedIds = new Set(assessmentAttempts.map(a => a.assessmentId))
-  const profileViews = await prisma.profileView.count({ where: { profileId: profile.id } })
-
-  const initials = profile.user.name
-    ? profile.user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
-    : '?'
-  const firstName = profile.user.name?.split(' ')[0] ?? 'there'
-
-  const CHECKLIST = [
-    { key: 'institution', label: 'Add your institution & degree', done: !!profile.institution },
-    { key: 'skills', label: 'Select your tech stack', done: profile.skills.length > 0 },
-    { key: 'project', label: 'Add your first project', done: profile.projects.length >= 1 },
-    { key: 'salary', label: 'Set salary & availability', done: !!profile.salaryExpectation && !!profile.availableFrom },
-    { key: 'assessment', label: 'Verify at least one skill', done: verifiedSkills.length > 0 },
-    { key: 'project2', label: 'Add a second project', done: profile.projects.length >= 2 },
-  ]
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening'
 
   return (
-    <div className="p-8 max-w-[880px]">
+    <div className="p-7 max-w-[960px]">
 
-      {/* BANNER */}
-      <div className="bg-navy rounded-card p-7 flex items-center gap-5 mb-6">
-        <div className="w-16 h-16 rounded-full bg-blue flex items-center justify-center text-xl font-bold text-white shrink-0 border-2 border-white/15">
+      {/* ── HEADER ROW ── */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue to-[#7C3AED] flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-md">
           {initials}
         </div>
         <div className="flex-1">
-          <h1 className="text-xl font-bold text-white mb-1">Good morning, {firstName} 👋</h1>
-          <p className="text-sm text-white/50">
-            {profile.degree ?? 'Student'}{profile.institution ? ` · ${profile.institution}` : ''}
-            {profile.graduationMonth && profile.graduationYear ? ` · Graduating ${profile.graduationMonth} ${profile.graduationYear}` : ''}
+          <h1 className="text-2xl font-bold text-navy dark:text-white leading-tight tracking-tight">
+            {greeting}, {firstName}
+          </h1>
+          <p className="text-sm text-gray-400 dark:text-white/40 mt-0.5">
+            {degree}{institution ? ` · ${institution}` : ''}
           </p>
         </div>
-        <svg viewBox="0 0 72 72" width="72" height="72" className="shrink-0">
-          <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="5" />
-          <circle cx="36" cy="36" r="28" fill="none" stroke="#FFC84D" strokeWidth="5" strokeLinecap="round"
-            strokeDasharray="175.9" strokeDashoffset={175.9 - (score / 100) * 175.9}
-            transform="rotate(-90 36 36)" />
-          <text x="36" y="33" textAnchor="middle" fill="white" fontSize="14" fontWeight="700" fontFamily="Inter">{score}%</text>
-          <text x="36" y="45" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="Inter">complete</text>
-        </svg>
+        <div className="flex items-center gap-3">
+          {score < 100 && (
+            <button
+              onClick={() => setShowBoost(true)}
+              className="flex items-center gap-1.5 text-xs font-semibold text-blue border border-blue/30 bg-blue/5 dark:bg-blue/10 px-3 py-2 rounded-btn hover:bg-blue/10 dark:hover:bg-blue/20 transition-colors"
+            >
+              ✦ Boost profile
+            </button>
+          )}
+          <Link href="/passport" className="text-xs font-semibold text-gray-400 dark:text-white/30 hover:text-navy dark:hover:text-white transition-colors">
+            View passport →
+          </Link>
+        </div>
       </div>
 
-      {/* JENI NUDGE */}
-      {verifiedSkills.length === 0 && (
-        <div className="flex items-center gap-4 bg-blue/5 border border-blue/20 rounded-card px-5 py-4 mb-6">
-          <div className="w-9 h-9 bg-blue rounded-xl flex items-center justify-center text-white font-bold text-sm shrink-0">✦</div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold mb-0.5">Take an assessment to get your first verified badge</p>
-            <p className="text-sm text-gray-500">Your skills are self-declared. One 20-question assessment unlocks more recruiter matches and a verified badge.</p>
-          </div>
-          <Link href="/passport" className="text-sm font-semibold text-blue whitespace-nowrap hover:underline">Start assessment →</Link>
+      {/* ── STAT ROW ── */}
+      <div className="grid grid-cols-4 gap-3 mb-8">
+
+        {/* Passport card — gradient hero */}
+        <div className="rounded-2xl px-6 py-5 bg-gradient-to-br from-[#0D1B2A] to-[#162E4A] relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.04]" style={{
+            backgroundImage: 'radial-gradient(circle at 70% 20%, #2563EB 0%, transparent 60%)',
+          }} />
+          <p className="text-4xl font-bold text-yellow leading-none mb-1 relative z-10">{score}%</p>
+          <p className="text-xs font-medium text-white/50 relative z-10">Passport complete</p>
+          {score < 100 && (
+            <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden relative z-10">
+              <div className="h-full bg-gradient-to-r from-yellow to-[#FFA500] rounded-full transition-all" style={{ width: `${score}%` }} />
+            </div>
+          )}
         </div>
+
+        {/* Role matches */}
+        <StatCard
+          value={MOCK_MATCHES.length}
+          label="Role matches"
+          icon={<TrendingUp size={14} className="text-blue" />}
+          href="/opportunities"
+        />
+
+        {/* Profile views */}
+        <StatCard
+          value={views}
+          label="Profile views this week"
+          icon={<Eye size={14} className="text-purple-500" />}
+        />
+
+        {/* Verified skills */}
+        <StatCard
+          value={skillCount}
+          label={stored ? 'Skills added' : 'Verified skills'}
+          icon={<BadgeCheck size={14} className="text-green-500" />}
+          href="/passport"
+        />
+      </div>
+
+      {/* ── BOOST PANEL ── */}
+      {showBoost && stored && (
+        <ProfileBoostPanel
+          student={stored}
+          onClose={() => setShowBoost(false)}
+          onSaved={() => { setStored(loadStudent()); setShowBoost(false) }}
+        />
       )}
 
-      {/* STATS */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        {[
-          { value: profile.matches.length, label: 'Matched roles', delta: '↑ updated today', up: true },
-          { value: profileViews, label: 'Recruiter views', delta: 'total views', up: false },
-          { value: `${score}%`, label: 'Passport complete', delta: `${CHECKLIST.filter(c => !c.done).length} steps left`, up: false },
-          { value: verifiedSkills.length, label: 'Verified skills', delta: `${availableAssessments.filter(a => !completedIds.has(a.id)).length} more available`, up: false },
-        ].map(({ value, label, delta, up }) => (
-          <div key={label} className="bg-white border border-border rounded-card p-4">
-            <div className="text-3xl font-bold tracking-tight mb-0.5">{value}</div>
-            <div className="text-xs text-gray-400 font-medium">{label}</div>
-            <div className={`text-[11px] font-semibold mt-1 ${up ? 'text-green-600' : 'text-gray-400'}`}>{delta}</div>
+      {/* ── MATCHES + NEXT STEP ── */}
+      <div className="grid grid-cols-3 gap-4 mb-4">
+
+        <div className="col-span-2 bg-white dark:bg-[#111C2E] border border-border dark:border-[#1E2D40] rounded-2xl p-5 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm font-semibold dark:text-white">Top role matches</p>
+            <Link href="/opportunities" className="text-xs font-semibold text-blue hover:underline flex items-center gap-0.5">
+              See all {MOCK_MATCHES.length} <ChevronRight size={12} />
+            </Link>
           </div>
-        ))}
+          <div className="flex flex-col gap-1">
+            {MOCK_MATCHES.slice(0, 3).map(match => {
+              const abbr = match.company.split(' ').map((w: string) => w[0]).join('').slice(0, 2)
+              const col = companyColor(match.company)
+              const scoreColor = match.score >= 90 ? 'text-green-500' : match.score >= 75 ? 'text-blue' : 'text-yellow-600'
+              return (
+                <Link
+                  key={match.id}
+                  href="/opportunities"
+                  className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group"
+                >
+                  <div className={`w-9 h-9 rounded-xl ${col} flex items-center justify-center text-xs font-bold text-white shrink-0`}>
+                    {abbr}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold dark:text-white truncate">{match.role}</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40">{match.company} · {match.city}</p>
+                  </div>
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="h-1.5 w-16 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${match.score >= 90 ? 'bg-green-400' : match.score >= 75 ? 'bg-blue' : 'bg-yellow-400'}`}
+                        style={{ width: `${match.score}%` }}
+                      />
+                    </div>
+                    <span className={`text-sm font-bold w-9 text-right ${scoreColor}`}>{match.score}%</span>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-[#111C2E] border border-border dark:border-[#1E2D40] rounded-2xl p-5 flex flex-col shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+          <p className="text-sm font-semibold mb-1 dark:text-white">Next step</p>
+          {nextTask ? (
+            <>
+              <p className="text-xs text-gray-400 dark:text-white/40 mb-4 leading-relaxed flex-1">{nextTask.label}</p>
+              <div className="flex flex-col gap-2 mt-auto">
+                <div className="flex gap-1 mb-2">
+                  {checklist.map((c, i) => (
+                    <div key={i} className={`h-1.5 flex-1 rounded-full ${c.done ? 'bg-blue' : 'bg-gray-100 dark:bg-white/10'}`} />
+                  ))}
+                </div>
+                <button
+                  onClick={() => setShowBoost(true)}
+                  className="w-full bg-navy dark:bg-blue text-white text-xs font-semibold py-2.5 rounded-btn hover:opacity-90"
+                >
+                  ✦ Help me with this
+                </button>
+                <Link href="/passport" className="w-full text-center text-xs text-gray-400 dark:text-white/30 hover:text-navy dark:hover:text-white py-1.5 transition-colors">
+                  Do it myself →
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-4">
+              <div className="w-12 h-12 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-2xl mb-3">✓</div>
+              <p className="text-sm font-semibold text-green-600">Passport complete!</p>
+              <p className="text-xs text-gray-400 dark:text-white/40 mt-1">You're visible to all employers</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* TWO-COL */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      {/* ── BOTTOM ROW ── */}
+      <div className="grid grid-cols-3 gap-4">
 
-        {/* Passport */}
-        <div className="bg-white border border-border rounded-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-semibold">Skills Passport</span>
-            <Link href="/passport" className="text-sm font-medium text-blue hover:underline">View full →</Link>
+        {/* Skills */}
+        <div className="bg-white dark:bg-[#111C2E] border border-border dark:border-[#1E2D40] rounded-2xl p-5 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-semibold dark:text-white">Skills</p>
+            <Link href="/passport" className="text-xs text-blue font-semibold hover:underline">Edit →</Link>
           </div>
-          <div className="flex items-center gap-4 mb-4">
-            <svg viewBox="0 0 56 56" width="56" height="56" className="shrink-0">
-              <circle cx="28" cy="28" r="22" fill="none" stroke="#F3F4F6" strokeWidth="4" />
-              <circle cx="28" cy="28" r="22" fill="none" stroke="#2563EB" strokeWidth="4" strokeLinecap="round"
-                strokeDasharray="138.2" strokeDashoffset={138.2 - (score / 100) * 138.2}
-                transform="rotate(-90 28 28)" />
-            </svg>
-            <div>
-              <div className="text-2xl font-bold tracking-tight">{score}%</div>
-              <p className="text-sm text-gray-500">{CHECKLIST.filter(c => !c.done).length} tasks to complete</p>
-            </div>
+          <div className="flex flex-wrap gap-1.5">
+            {stored
+              ? Object.entries(stored.skills).slice(0, 8).map(([skillName, level]) => (
+                  <span key={skillName} className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                    level === 'confident'
+                      ? 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-400'
+                      : 'bg-gray-100 dark:bg-white/15 text-gray-600 dark:text-white/70'
+                  }`}>
+                    {level === 'confident' ? '✓ ' : ''}{skillName}
+                  </span>
+                ))
+              : verifiedSkills.slice(0, 8).map(s => (
+                  <span key={s.id} className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-400">
+                    ✓ {s.name}
+                  </span>
+                ))
+            }
+          </div>
+        </div>
+
+        {/* Assessments */}
+        <div className="bg-white dark:bg-[#111C2E] border border-border dark:border-[#1E2D40] rounded-2xl p-5 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-semibold dark:text-white">Assessments</p>
+            <Link href="/passport" className="text-xs text-blue font-semibold hover:underline">View all →</Link>
           </div>
           <div className="flex flex-col gap-2">
-            {CHECKLIST.map(({ key, label, done }) => (
-              <div key={key} className="flex items-center gap-2.5 text-sm">
-                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] shrink-0 ${done ? 'bg-green-100 text-green-600' : 'bg-gray-100 border border-border text-gray-400'}`}>
-                  {done ? '✓' : '○'}
+            {!stored && MOCK_ASSESSMENTS_COMPLETED.slice(0, 1).map(a => (
+              <div key={a.id} className="flex items-center gap-3 px-3 py-2.5 bg-green-50 dark:bg-green-900/15 rounded-xl">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold truncate dark:text-white">{a.title}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-white/40">Completed · Verified</p>
                 </div>
-                <span className={done ? 'line-through text-gray-400' : 'text-navy'}>{label}</span>
+                <span className="text-sm font-bold text-green-600">{a.score}</span>
+              </div>
+            ))}
+            {MOCK_ASSESSMENTS_AVAILABLE.slice(0, 2).map(a => (
+              <div key={a.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold truncate dark:text-white">{a.title}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-white/40">~{a.minutes} min</p>
+                </div>
+                <button className="text-xs font-semibold text-blue hover:underline shrink-0">Start →</button>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Top matches */}
-        <div className="bg-white border border-border rounded-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-semibold">Top matches</span>
-            <Link href="/opportunities" className="text-sm font-medium text-blue hover:underline">
-              See all {profile.matches.length} →
-            </Link>
+        {/* Video intro CTA */}
+        <div className="bg-gradient-to-br from-[#0D1B2A] to-[#162E4A] rounded-2xl p-5 flex flex-col relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.06]" style={{
+            backgroundImage: 'radial-gradient(circle at 80% 80%, #7C3AED 0%, transparent 60%)',
+          }} />
+          <div className="flex items-center gap-2 mb-2 relative z-10">
+            <span className="text-base">🎥</span>
+            <p className="text-sm font-semibold text-white">Video intro</p>
           </div>
-          {profile.matches.length === 0 ? (
-            <div className="text-sm text-gray-400 py-4">
-              Complete your passport to unlock your first matches.
-            </div>
-          ) : (
-            profile.matches.map(match => {
-              const opp = match.opportunity
-              const abbr = opp.companyName?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() ?? '??'
-              return (
-                <Link key={match.id} href="/opportunities" className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-blue transition-colors mb-2 last:mb-0">
-                  <div className="w-10 h-10 rounded-lg bg-gray-50 border border-border flex items-center justify-center text-xs font-bold text-gray-500 shrink-0">
-                    {abbr}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold truncate">{opp.title}</p>
-                    <p className="text-xs text-gray-400 truncate">{opp.companyName} · {opp.city}</p>
-                  </div>
-                  <span className="text-sm font-bold text-green-600 shrink-0">{match.score}%</span>
-                </Link>
-              )
-            })
-          )}
-        </div>
-      </div>
-
-      {/* ASSESSMENTS */}
-      <div className="bg-white border border-border rounded-card p-5 mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-semibold">Skill assessments</span>
-          <Link href="/passport" className="text-sm font-medium text-blue hover:underline">View all →</Link>
-        </div>
-        {assessmentAttempts.slice(0, 2).map(attempt => (
-          <div key={attempt.id} className="flex items-center gap-3 py-3 border-b border-border last:border-0">
-            <div className="w-9 h-9 rounded-lg bg-yellow/10 flex items-center justify-center text-base shrink-0">📋</div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold">{attempt.assessment.title}</p>
-              <p className="text-xs text-gray-400">Completed · 20 questions</p>
-            </div>
-            <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">✓ Verified</span>
-            <span className="text-sm font-bold text-green-600">{attempt.score}/100</span>
+          <p className="text-xs text-white/50 leading-relaxed flex-1 mb-4 relative z-10">
+            Profiles with a video get <strong className="text-white">3× more</strong> employer interest. 5 questions, 60 seconds each.
+          </p>
+          <div className="flex gap-1 mb-4 relative z-10">
+            {[1,2,3,4,5].map(i => (
+              <div key={i} className="flex-1 h-1 rounded-full bg-white/15" />
+            ))}
           </div>
-        ))}
-        {availableAssessments.filter(a => !completedIds.has(a.id)).slice(0, 3 - assessmentAttempts.length).map((a, i) => (
-          <div key={a.id} className="flex items-center gap-3 py-3 border-b border-border last:border-0">
-            <div className="w-9 h-9 rounded-lg bg-blue/5 flex items-center justify-center text-base shrink-0">💻</div>
-            <div className="flex-1">
-              <p className="text-sm font-semibold">{a.title}</p>
-              <p className="text-xs text-gray-400">{i === 0 ? 'Recommended · ' : 'Available · '}20 questions · ~15 min</p>
-            </div>
-            <Link href={`/assessments/${a.id}`} className="text-xs font-semibold text-blue hover:underline">Start →</Link>
-          </div>
-        ))}
-      </div>
-
-      {/* RECENT ACTIVITY */}
-      <div className="bg-white border border-border rounded-card p-5">
-        <div className="text-sm font-semibold mb-4">Recent activity</div>
-        <div className="flex flex-col gap-3">
-          {assessmentAttempts.slice(0, 1).map(a => (
-            <div key={a.id} className="flex items-center gap-3 text-sm">
-              <div className="w-2 h-2 rounded-full bg-yellow shrink-0" />
-              <span className="flex-1">{a.assessment.title} completed — {a.score}/100 ✓</span>
-              <span className="text-xs text-gray-400">{a.completedAt ? new Date(a.completedAt).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short' }) : ''}</span>
-            </div>
-          ))}
-          <div className="flex items-center gap-3 text-sm">
-            <div className="w-2 h-2 rounded-full bg-gray-300 shrink-0" />
-            <span className="flex-1">Profile created and passport started</span>
-            <span className="text-xs text-gray-400">–</span>
-          </div>
+          <Link
+            href="/video-intro"
+            className="w-full text-center bg-blue text-white text-xs font-semibold py-2.5 rounded-btn hover:opacity-90 transition-opacity relative z-10"
+          >
+            Record now →
+          </Link>
         </div>
       </div>
 
     </div>
   )
+}
+
+function StatCard({
+  value, label, icon, href
+}: {
+  value: number | string
+  label: string
+  icon?: React.ReactNode
+  href?: string
+}) {
+  const content = (
+    <div className="rounded-2xl px-5 py-5 bg-white dark:bg-[#111C2E] border border-border dark:border-[#1E2D40] shadow-[0_1px_4px_rgba(0,0,0,0.05)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow">
+      <div className="flex items-center justify-between mb-1">
+        {icon && <div className="opacity-70">{icon}</div>}
+      </div>
+      <p className="text-3xl font-bold text-navy dark:text-white leading-none mb-1">{value}</p>
+      <p className="text-xs font-medium text-gray-400 dark:text-white/40">{label}</p>
+    </div>
+  )
+  return href ? <Link href={href}>{content}</Link> : content
 }

@@ -1,5 +1,6 @@
-import { SkillLevel } from '@prisma/client'
 import Chip from '@/components/ui/Chip'
+
+export type SkillLevel = 'LEARNING' | 'CONFIDENT' | 'VERIFIED'
 
 interface SkillChipProps {
   name: string

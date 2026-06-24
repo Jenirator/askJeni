@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 
 export default function PublicNav() {
   return (
     <nav className="h-16 bg-navy flex items-center justify-between px-8">
-      <span className="text-white font-bold text-lg">askJeni</span>
+      <Logo size={18} variant="light" />
       <div className="flex items-center gap-4">
         <Link href="/login" className="text-white/70 text-sm hover:text-white">
           Sign in

@@ -1,6 +1,4 @@
-import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { redirect } from 'next/navigation'
+import { MOCK_MATCHES } from '@/lib/mock-data'
 
 export const metadata = { title: 'Interview Prep' }
 
@@ -61,18 +59,8 @@ const SAMPLE_QUESTIONS = [
   },
 ]
 
-export default async function InterviewPrepPage() {
-  const session = await auth()
-  if (!session?.user?.id) redirect('/login')
-
-  const profile = await prisma.studentProfile.findUnique({
-    where: { userId: session.user.id },
-    include: { matches: { include: { opportunity: true }, take: 3, orderBy: { score: 'desc' } } },
-  })
-
-  if (!profile) redirect('/register')
-
-  const topCompanies = profile.matches.map(m => m.opportunity.companyName).filter(Boolean).slice(0, 3).join(', ')
+export default function InterviewPrepPage() {
+  const topCompanies = MOCK_MATCHES.slice(0, 3).map(m => m.company).join(', ')
 
   return (
     <div className="p-8 max-w-[880px]">
@@ -82,9 +70,7 @@ export default async function InterviewPrepPage() {
         <div className="flex-1">
           <h1 className="text-[22px] font-bold text-white mb-2 tracking-tight">Prep smart, not just hard</h1>
           <p className="text-sm text-white/50 leading-relaxed max-w-lg">
-            {topCompanies
-              ? `Your interview prep is tailored to the roles you've matched with. ${topCompanies} all ask React and Python questions — that's where we focus.`
-              : 'Complete your passport to get prep tailored to your matched companies.'}
+            Your interview prep is tailored to the roles you&apos;ve matched with. {topCompanies} all ask React and Python questions — that&apos;s where we focus.
           </p>
         </div>
         <div className="flex gap-6 shrink-0">
@@ -166,7 +152,7 @@ export default async function InterviewPrepPage() {
         <div className="flex-1">
           <h3 className="text-[17px] font-bold text-white mb-1">Practice live with Jeni</h3>
           <p className="text-sm text-white/50 leading-relaxed">
-            Jeni will ask you questions, listen to your answers, and give you specific feedback on what's strong, what's vague, and what to sharpen before the real interview. Like a mock interview, but available at 2am before your big day.
+            Jeni will ask you questions, listen to your answers, and give you specific feedback on what&apos;s strong, what&apos;s vague, and what to sharpen before the real interview. Like a mock interview, but available at 2am before your big day.
           </p>
         </div>
         <button className="bg-blue text-white text-sm font-semibold px-5 py-2.5 rounded-btn whitespace-nowrap hover:opacity-90 shrink-0">

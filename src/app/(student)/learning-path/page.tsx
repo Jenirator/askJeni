@@ -1,64 +1,40 @@
-import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { redirect } from 'next/navigation'
-import { SkillLevel } from '@prisma/client'
-import { computePassportCompletion } from '@/lib/utils'
+import { MOCK_STUDENT, MOCK_SKILLS, MOCK_PROJECTS, MOCK_MATCHES, MOCK_ASSESSMENTS_COMPLETED } from '@/lib/mock-data'
 import Link from 'next/link'
 
 export const metadata = { title: 'Learning Path' }
 
-export default async function LearningPathPage() {
-  const session = await auth()
-  if (!session?.user?.id) redirect('/login')
-
-  const profile = await prisma.studentProfile.findUnique({
-    where: { userId: session.user.id },
-    include: {
-      user: true,
-      skills: true,
-      projects: true,
-      matches: true,
-    },
-  })
-
-  if (!profile) redirect('/register')
-
-  const completedAttempts = await prisma.assessmentAttempt.findMany({
-    where: { userId: session.user.id, status: 'COMPLETED' },
-    include: { assessment: true },
-  })
-
-  const score = computePassportCompletion(profile)
-  const verifiedSkills = profile.skills.filter(s => s.level === SkillLevel.VERIFIED)
+export default function LearningPathPage() {
+  const score = MOCK_STUDENT.passportCompletion
+  const verifiedSkills = MOCK_SKILLS.filter(s => s.level === 'VERIFIED')
 
   const milestones = [
     {
       id: 'm1',
       title: 'Complete your profile',
-      done: !!profile.institution && !!profile.salaryExpectation,
+      done: true,
       tasks: [
-        { label: 'Add institution, degree, and year', done: !!profile.institution },
-        { label: 'Set salary expectation and availability', done: !!profile.salaryExpectation && !!profile.availableFrom },
-        { label: 'Add location and work type preferences', done: !!profile.city },
-        { label: 'Connect GitHub profile', done: !!profile.githubUrl },
+        { label: 'Add institution, degree, and year', done: true },
+        { label: 'Set salary expectation and availability', done: true },
+        { label: 'Add location and work type preferences', done: true },
+        { label: 'Connect GitHub profile', done: true },
       ],
     },
     {
       id: 'm2',
       title: 'Add your tech stack',
-      done: profile.skills.length >= 4,
+      done: true,
       tasks: [
-        { label: 'Select at least 4 confident skills', done: profile.skills.filter(s => s.level !== SkillLevel.LEARNING).length >= 4 },
-        { label: 'Select learning skills (in progress)', done: profile.skills.filter(s => s.level === SkillLevel.LEARNING).length > 0 },
+        { label: 'Select at least 4 confident skills', done: true },
+        { label: 'Select learning skills (in progress)', done: true },
       ],
     },
     {
       id: 'm3',
       title: 'Add your projects',
-      done: profile.projects.length >= 2,
+      done: MOCK_PROJECTS.length >= 2,
       tasks: [
-        { label: 'Add your first project with description and tech stack', done: profile.projects.length >= 1 },
-        { label: 'Add a second project or link GitHub repos', done: profile.projects.length >= 2 },
+        { label: 'Add your first project with description and tech stack', done: MOCK_PROJECTS.length >= 1 },
+        { label: 'Add a second project or link GitHub repos', done: MOCK_PROJECTS.length >= 2 },
       ],
     },
     {
@@ -67,9 +43,17 @@ export default async function LearningPathPage() {
       done: verifiedSkills.length >= 2,
       active: verifiedSkills.length < 2,
       tasks: [
-        { label: `Complete first skill assessment${completedAttempts[0] ? ` (${completedAttempts[0].assessment.title} — ${completedAttempts[0].score}/100)` : ''}`, done: completedAttempts.length >= 1, cta: completedAttempts.length === 0 ? { label: 'Start →', href: '/passport' } : null },
-        { label: 'Verify a second skill (React recommended)', done: verifiedSkills.length >= 2, cta: verifiedSkills.length < 2 ? { label: 'Start →', href: '/passport' } : null },
-        { label: 'Reach 90%+ passport completion', done: score >= 90 },
+        {
+          label: `Complete first skill assessment${MOCK_ASSESSMENTS_COMPLETED[0] ? ` (${MOCK_ASSESSMENTS_COMPLETED[0].title} — ${MOCK_ASSESSMENTS_COMPLETED[0].score}/100)` : ''}`,
+          done: MOCK_ASSESSMENTS_COMPLETED.length >= 1,
+          cta: MOCK_ASSESSMENTS_COMPLETED.length === 0 ? { label: 'Start →', href: '/passport' } : null,
+        },
+        {
+          label: 'Verify a second skill (React recommended)',
+          done: verifiedSkills.length >= 2,
+          cta: verifiedSkills.length < 2 ? { label: 'Start →', href: '/passport' } : null,
+        },
+        { label: 'Reach 90%+ passport completion', done: score >= 90, cta: null },
       ],
     },
     {
@@ -78,16 +62,16 @@ export default async function LearningPathPage() {
       done: false,
       locked: verifiedSkills.length < 2,
       tasks: [
-        { label: 'Review your top 3 matched roles', done: false },
-        { label: 'Complete interview prep module for your top match', done: false },
-        { label: 'Express interest in at least one role', done: false },
+        { label: 'Review your top 3 matched roles', done: false, cta: null },
+        { label: 'Complete interview prep module for your top match', done: false, cta: null },
+        { label: 'Express interest in at least one role', done: false, cta: null },
       ],
     },
   ]
 
   const doneMilestones = milestones.filter(m => m.done).length
-  const activeMilestone = milestones.find(m => m.active)
   const progressPct = Math.round((doneMilestones / milestones.length) * 100)
+  const activeMilestone = milestones.find(m => m.active)
 
   return (
     <div className="p-8 max-w-[880px]">
@@ -115,7 +99,7 @@ export default async function LearningPathPage() {
         {[
           { value: doneMilestones, label: 'Milestones done' },
           { value: milestones.length - doneMilestones, label: 'Remaining' },
-          { value: profile.matches.length, label: 'Matched roles' },
+          { value: MOCK_MATCHES.length, label: 'Matched roles' },
         ].map(({ value, label }, i, arr) => (
           <div key={label} className="flex items-center gap-6">
             <div className="text-center">
@@ -140,7 +124,6 @@ export default async function LearningPathPage() {
           const isLast = idx === milestones.length - 1
           return (
             <div key={milestone.id} className="flex gap-0">
-              {/* Left: dot + line */}
               <div className="flex flex-col items-center w-12 shrink-0">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-bold z-10 border-2 border-[#F7F9FC] ${milestone.done ? 'bg-green-500 text-white' : milestone.active ? 'bg-blue text-white' : 'bg-white border-border text-gray-400'}`}>
                   {milestone.done ? '✓' : idx + 1}
@@ -150,7 +133,6 @@ export default async function LearningPathPage() {
                 )}
               </div>
 
-              {/* Right: content */}
               <div className={`flex-1 pl-4 ${isLast ? 'pb-0' : 'pb-8'}`}>
                 <div className="flex items-center justify-between pt-2 mb-3">
                   <div>
@@ -166,7 +148,6 @@ export default async function LearningPathPage() {
                   </span>
                 </div>
 
-                {/* Tasks (always show for active, hide for done/locked unless expanded) */}
                 {(milestone.active || (!milestone.done && !milestone.locked)) && (
                   <div className="bg-white border border-border rounded-xl p-4">
                     {milestone.tasks.map((task, ti) => (
