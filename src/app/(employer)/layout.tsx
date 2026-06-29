@@ -52,9 +52,9 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
           >
             View apply portal ↗
           </Link>
-          <button className="flex items-center gap-1.5 bg-blue text-white text-xs font-semibold px-4 py-1.5 rounded-btn hover:opacity-90 transition-opacity">
+          <Link href="/roles/new" className="flex items-center gap-1.5 bg-blue text-white text-xs font-semibold px-4 py-1.5 rounded-btn hover:opacity-90 transition-opacity">
             + Post a role
-          </button>
+          </Link>
         </div>
       </nav>
       {children}

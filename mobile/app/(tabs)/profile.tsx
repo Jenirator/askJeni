@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Switch } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Switch, Share, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
@@ -12,6 +12,20 @@ const verified = MOCK_SKILLS.filter(s => s.level === 'VERIFIED').length
 export default function ProfileScreen() {
   const router = useRouter()
   const [openToWork, setOpenToWork] = useState(true)
+
+  async function handleShare() {
+    await Share.share({
+      message: "Check out my Skills Passport on askJeni: https://askjeni.co.za/profile/thabo-nkosi",
+      url: "https://askjeni.co.za/profile/thabo-nkosi",
+    })
+  }
+
+  function handleSignOut() {
+    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Sign out', style: 'destructive', onPress: () => {} },
+    ])
+  }
 
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
@@ -58,17 +72,17 @@ export default function ProfileScreen() {
 
       {/* Menu */}
       <View style={s.menu}>
-        <MenuItem icon="person-outline"          label="Edit profile"          />
-        <MenuItem icon="shield-checkmark-outline" label="Skills & assessments"  />
-        <MenuItem icon="videocam-outline"         label="Video intro"           tag="New" />
-        <MenuItem icon="briefcase-outline"        label="Saved roles"           value={`0 saved`} />
-        <MenuItem icon="notifications-outline"   label="Notifications"         onPress={() => router.push('/notifications')} />
-        <MenuItem icon="share-outline"           label="Share profile"         />
+        <MenuItem icon="person-outline"           label="Edit profile"         onPress={() => router.push('/edit-profile')} />
+        <MenuItem icon="shield-checkmark-outline" label="Skills & assessments" onPress={() => router.push('/(tabs)/passport')} />
+        <MenuItem icon="videocam-outline"         label="Video intro"          tag="New" onPress={() => router.push('/video-intro')} />
+        <MenuItem icon="briefcase-outline"        label="Saved roles"          value="0 saved" onPress={() => router.push('/saved-roles')} />
+        <MenuItem icon="notifications-outline"    label="Notifications"        onPress={() => router.push('/notifications')} />
+        <MenuItem icon="share-outline"            label="Share profile"        onPress={handleShare} />
       </View>
 
       {/* Sign out */}
       <View style={s.footer}>
-        <TouchableOpacity style={s.signOutBtn}>
+        <TouchableOpacity style={s.signOutBtn} onPress={handleSignOut}>
           <Ionicons name="log-out-outline" size={16} color="#DC2626" />
           <Text style={s.signOutText}>Sign out</Text>
         </TouchableOpacity>

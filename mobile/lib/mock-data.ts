@@ -33,6 +33,61 @@ export const MOCK_ASSESSMENTS = [
   { id: '4', title: 'System Design Basics',     score: null, completed: false, minutes: 25 },
 ]
 
+export type AppStage = 'applied' | 'reviewing' | 'interview' | 'offer' | 'rejected'
+
+export const MOCK_APPLICATIONS = [
+  {
+    id: 'app1',
+    company: 'Peach Payments',
+    role: 'Junior Software Engineer',
+    city: 'Cape Town',
+    stage: 'interview' as AppStage,
+    appliedDaysAgo: 3,
+    note: "You've been shortlisted — please pick a time for a 30-min video interview.",
+    actionLabel: 'Schedule interview',
+  },
+  {
+    id: 'app2',
+    company: 'Takealot',
+    role: 'Graduate Developer',
+    city: 'Johannesburg',
+    stage: 'reviewing' as AppStage,
+    appliedDaysAgo: 5,
+    note: "Your application is under review. We'll be in touch within 5 business days.",
+    actionLabel: null,
+  },
+  {
+    id: 'app3',
+    company: 'Yoco',
+    role: 'Frontend Developer',
+    city: 'Cape Town',
+    stage: 'applied' as AppStage,
+    appliedDaysAgo: 7,
+    note: null,
+    actionLabel: null,
+  },
+  {
+    id: 'app4',
+    company: 'Discovery',
+    role: 'React Developer',
+    city: 'Johannesburg',
+    stage: 'rejected' as AppStage,
+    appliedDaysAgo: 14,
+    note: "Thank you for applying. We've decided to move forward with other candidates.",
+    actionLabel: null,
+  },
+  {
+    id: 'app5',
+    company: 'FNB Tech',
+    role: 'Software Engineer Intern',
+    city: 'Johannesburg',
+    stage: 'offer' as AppStage,
+    appliedDaysAgo: 18,
+    note: "Congratulations! We'd like to offer you the Software Engineer Intern role.",
+    actionLabel: 'View offer',
+  },
+]
+
 export const CHECKLIST = [
   { label: 'Add your institution & degree', done: true  },
   { label: 'Select your tech stack',        done: true  },

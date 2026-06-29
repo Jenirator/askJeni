@@ -33,7 +33,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Inbox',
-          tabBarBadge: 2,
+          tabBarBadge: 3,
           tabBarBadgeStyle: { backgroundColor: colors.blue, fontSize: 10 },
         }}
       />

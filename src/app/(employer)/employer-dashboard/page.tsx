@@ -1,8 +1,40 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { MOCK_ROLE, MOCK_EMPLOYER_ROLES, MOCK_APPLICATIONS } from '@/lib/mock-data'
-import { Plus, ExternalLink, ChevronRight, TrendingUp, Users, Clock, Zap } from 'lucide-react'
+import { Plus, ExternalLink, ChevronRight, TrendingUp, Users, Clock, Zap, Check, X } from 'lucide-react'
+
+const ONBOARDING_STEPS = [
+  {
+    id: 'post',
+    title: 'Post your first role',
+    body: 'Create a role, set the skills you need, and publish your apply link.',
+    cta: 'Post a role →',
+    href: '/roles/new',
+  },
+  {
+    id: 'share',
+    title: 'Share your apply link',
+    body: 'Share the link on LinkedIn, your website, or wherever you advertise. No CVs will ever hit your inbox.',
+    cta: 'Copy apply link',
+    href: null,
+  },
+  {
+    id: 'review',
+    title: 'Review your first application',
+    body: 'Click any candidate in the New column to see their Skills Passport, assessments, and projects.',
+    cta: 'Open pipeline →',
+    href: '/pipeline',
+  },
+  {
+    id: 'invite',
+    title: 'Invite a candidate to interview',
+    body: 'Shortlist a strong candidate and use the Schedule Interview flow to send them time slots.',
+    cta: 'Open pipeline →',
+    href: '/pipeline',
+  },
+]
 
 const STAGES = ['new', 'screening', 'shortlisted', 'interview', 'offer', 'hired', 'declined'] as const
 const STAGE_LABELS: Record<string, string> = {
@@ -18,6 +50,18 @@ const STAGE_LABELS: Record<string, string> = {
 export default function EmployerDashboardPage() {
   const role = MOCK_ROLE
   const apps = MOCK_APPLICATIONS
+  const [done, setDone] = useState<Set<string>>(new Set())
+  const [checklistDismissed, setChecklistDismissed] = useState(false)
+
+  function toggleStep(id: string) {
+    setDone(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const allDone = ONBOARDING_STEPS.every(s => done.has(s.id))
   const newCount = apps.filter(a => a.stage === 'new').length
   const thisWeek = apps.filter(a => a.appliedAt.includes('hour') || a.appliedAt.includes('day')).length
   const shortlisted = apps.filter(a => a.stage === 'shortlisted').length
@@ -47,12 +91,78 @@ export default function EmployerDashboardPage() {
             <ExternalLink size={12} />
             View apply portal
           </Link>
-          <button className="flex items-center gap-1.5 bg-navy text-white text-xs font-semibold px-3 py-2 rounded-btn hover:opacity-90">
+          <Link href="/roles/new" className="flex items-center gap-1.5 bg-navy text-white text-xs font-semibold px-3 py-2 rounded-btn hover:opacity-90">
             <Plus size={14} />
             Post a role
-          </button>
+          </Link>
         </div>
       </div>
+
+      {/* Onboarding checklist */}
+      {!checklistDismissed && (
+        <div className="bg-white border border-border rounded-2xl p-5 mb-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-0.5">
+                <p className="text-sm font-bold">Get started with askJeni</p>
+                {allDone && (
+                  <span className="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full">All done!</span>
+                )}
+              </div>
+              <p className="text-xs text-gray-400">
+                {done.size}/{ONBOARDING_STEPS.length} steps completed · Follow these steps to set up your first role
+              </p>
+            </div>
+            <button onClick={() => setChecklistDismissed(true)} className="text-gray-300 hover:text-gray-500 transition-colors p-1">
+              <X size={14} />
+            </button>
+          </div>
+
+          {/* Progress bar */}
+          <div className="h-1.5 bg-gray-100 rounded-full mb-5 overflow-hidden">
+            <div
+              className="h-full bg-blue rounded-full transition-all duration-500"
+              style={{ width: `${(done.size / ONBOARDING_STEPS.length) * 100}%` }}
+            />
+          </div>
+
+          <div className="grid grid-cols-4 gap-3">
+            {ONBOARDING_STEPS.map((step, i) => {
+              const isDone = done.has(step.id)
+              return (
+                <div key={step.id}
+                  className={`rounded-xl border p-4 transition-all ${isDone ? 'border-green-200 bg-green-50' : 'border-border bg-[#FAFBFC]'}`}>
+                  <div className="flex items-start justify-between mb-2">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                      isDone ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'
+                    }`}>
+                      {isDone ? <Check size={12} /> : i + 1}
+                    </div>
+                    <button onClick={() => toggleStep(step.id)}
+                      className="text-[10px] font-semibold text-gray-400 hover:text-navy transition-colors">
+                      {isDone ? 'undo' : 'mark done'}
+                    </button>
+                  </div>
+                  <p className={`text-xs font-bold mb-1 ${isDone ? 'text-green-700 line-through' : 'text-navy'}`}>
+                    {step.title}
+                  </p>
+                  <p className="text-[11px] text-gray-400 leading-relaxed mb-3">{step.body}</p>
+                  {step.href ? (
+                    <Link href={step.href}
+                      className="text-[11px] font-semibold text-blue hover:underline">
+                      {step.cta}
+                    </Link>
+                  ) : (
+                    <button className="text-[11px] font-semibold text-blue hover:underline">
+                      {step.cta}
+                    </button>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Stat strip */}
       <div className="grid grid-cols-4 gap-3 mb-6">

@@ -25,6 +25,43 @@ export default function ApplyPortalPage() {
   }
 
   function handleSubmit() {
+    // Build a pipeline application from the form data and save to localStorage
+    const isExisting = path === 'existing'
+    const name = isExisting ? 'Thabo Nkosi' : newUser.name
+    const institution = isExisting ? 'University of the Witwatersrand' : newUser.institution
+    const stack = isExisting ? ['React', 'Python', 'Node.js'] : newUser.stack.split(',').map(s => s.trim()).filter(Boolean)
+    const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+    const avatarColors = ['bg-blue', 'bg-purple-500', 'bg-green-600', 'bg-indigo-500', 'bg-rose-500']
+    const avatarColor = avatarColors[Math.floor(name.length % avatarColors.length)]
+    const passportCompletion = isExisting ? 83 : Math.floor(40 + Math.random() * 30)
+    const salary = isExisting ? 24000 : 20000
+
+    const newApp = {
+      id: `apply-${Date.now()}`,
+      candidateName: name,
+      initials,
+      avatarColor,
+      institution: institution || 'Unknown institution',
+      city: isExisting ? 'Johannesburg' : 'South Africa',
+      salary,
+      salaryDisplay: `R${salary.toLocaleString()}`,
+      passportCompletion,
+      stage: 'new',
+      appliedAt: 'Just now',
+      isNew: true,
+      verified: isExisting,
+      stack,
+      screeningAnswers: Object.entries(answers).map(([id, answer]) => ({
+        question: role.screeningQuestions.find(q => q.id === id)?.question ?? id,
+        answer,
+      })),
+    }
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('askjeni_applications') || '[]')
+      localStorage.setItem('askjeni_applications', JSON.stringify([newApp, ...existing]))
+    } catch {}
+
     setScreen('confirm')
   }
 
